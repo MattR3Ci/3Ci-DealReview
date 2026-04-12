@@ -1,0 +1,10 @@
+adx_append: false
+adx_appendto: false
+adx_create: false
+adx_delete: false
+adx_entitylogicalname: sharepointsite
+adx_entityname: sharepointsite
+adx_entitypermissionid: 7c55b1a7-b10d-f111-8406-000d3a5b0b5c
+adx_read: true
+adx_scope: 756150000
+adx_write: false

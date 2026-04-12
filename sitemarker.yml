@@ -1,0 +1,22 @@
+- adx_name: Profile
+  adx_pageid: 8e1fc712-bd7d-4abe-95ec-4cb87f35a597
+  adx_sitemarkerid: 0c7b6068-8522-4de3-8b67-b3afdc81e73c
+- adx_name: Access Denied
+  adx_pageid: 1c654ed6-68c5-4635-866c-18253c8e81cf
+  adx_sitemarkerid: 0e952c5a-13f3-46e2-8018-8c1615b6c6c7
+- adx_name: Knowledge Base
+  adx_sitemarkerid: 3d5ac279-eca6-4db8-a26e-8934de1320d4
+- adx_name: Page Not Found
+  adx_pageid: 7c9b3b3e-d875-4e46-83e0-aa1788669539
+  adx_sitemarkerid: 4f450d40-1583-4436-b3b0-faf599beae6f
+- adx_name: Home
+  adx_pageid: ce3a504e-e954-4526-8baa-663f144ad115
+  adx_sitemarkerid: 52e9da3e-f286-4d24-8013-d5d9a9ebda9a
+- adx_name: Search
+  adx_pageid: df10f372-2d79-4658-b3f5-9f63be8a9402
+  adx_sitemarkerid: ab9bd016-4340-40f8-a83e-78a7e5cc67b8
+- adx_name: Default Offline Page
+  adx_pageid: d66a8c60-8f7f-4033-b14c-3e5e235ae50d
+  adx_sitemarkerid: c450ad14-e232-4f06-8e15-19a3d7e05356
+- adx_name: Knowledge Base Search Results
+  adx_sitemarkerid: d3509654-b197-4d99-b5bf-8916def3a9c8

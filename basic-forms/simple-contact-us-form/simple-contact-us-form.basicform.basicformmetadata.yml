@@ -1,0 +1,39 @@
+- adx_adddescription: false
+  adx_attributelogicalname: adx_createdbycontact
+  adx_descriptionposition: 100000000
+  adx_entityform: b6545a16-6f7f-48db-a1e1-ba20886c9470
+  adx_entityformmetadataid: 367e6770-10c1-41e7-9e66-38bd76d519e1
+  adx_fieldisrequired: true
+  adx_ignoredefaultvalue: false
+  adx_name: simple contact us form adx_createdbycontact
+  adx_onsavetype: 100000000
+  adx_randomizeoptionsetvalues: false
+  adx_setvalueonsave: false
+  adx_type: 100000000
+  adx_useattributedescriptionproperty: true
+- adx_adddescription: false
+  adx_attributelogicalname: comments
+  adx_descriptionposition: 100000000
+  adx_entityform: b6545a16-6f7f-48db-a1e1-ba20886c9470
+  adx_entityformmetadataid: bad25ca9-2a6c-44aa-adfe-41e598adcaef
+  adx_fieldisrequired: true
+  adx_ignoredefaultvalue: false
+  adx_name: simple contact us form comments
+  adx_onsavetype: 100000000
+  adx_randomizeoptionsetvalues: false
+  adx_setvalueonsave: false
+  adx_type: 100000000
+  adx_useattributedescriptionproperty: true
+- adx_adddescription: false
+  adx_attributelogicalname: adx_contactemail
+  adx_descriptionposition: 100000000
+  adx_entityform: b6545a16-6f7f-48db-a1e1-ba20886c9470
+  adx_entityformmetadataid: d83db40b-c9ee-41fc-8a1b-fdb4c3cfa80e
+  adx_fieldisrequired: true
+  adx_ignoredefaultvalue: false
+  adx_name: simple contact us form adx_contactemail
+  adx_onsavetype: 100000000
+  adx_randomizeoptionsetvalues: false
+  adx_setvalueonsave: false
+  adx_type: 100000000
+  adx_useattributedescriptionproperty: true

@@ -1,0 +1,20 @@
+<link rel="stylesheet" href="/dealreview-theme.css">
+<script src="https://kit.fontawesome.com/c88e59de26.js" crossorigin="anonymous"></script>
+
+<script>
+    window.USER_CONTEXT = {
+        fullname: "{{ user.fullname }}",
+        id: "{{ user.id }}"
+    };
+</script>
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+<script src="/deal-constants.js"></script>
+<script src="/SubmissionCalc.js"></script>
+<script src="/UIComponents.js"></script>
+<script src="/SubmissionService.js"></script>
+
+<script src="/ReviewBoard.js"></script>
+
+<div id="review-board-app-wrapper" class="min-h-screen" style="background-color: var(--bg-app);">
+</div>

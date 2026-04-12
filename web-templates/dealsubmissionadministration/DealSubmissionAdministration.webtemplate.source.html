@@ -1,0 +1,530 @@
+<link rel="stylesheet" href="/dealreview-theme.css">
+<script src="https://kit.fontawesome.com/c88e59de26.js" crossorigin="anonymous"></script>
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+<script src="/deal-constants.js"></script>
+<script src="/dealsubmissionadministration.js"></script>
+<script src="/UIComponents.js"></script>
+<script src="/SubmissionCalc.js"></script>
+<script src="/SubmissionUI.js"></script>
+<script src="/SubmissionService.js"></script>
+<script src="/SubmissionApp.js"></script>
+
+<div id="dr-admin-app-wrapper" style="padding: 32px; max-width: 1600px; margin: 0 auto;">
+
+    <div class="d-flex justify-content-between align-items-end"
+        style="margin-bottom: 32px; border-bottom: 1px solid #E2E8F0; padding-bottom: 16px;">
+        <div>
+            <h1 style="margin: 0; font-size: 28px; font-weight: 800; color: #1E293B; letter-spacing: -0.02em;">Control
+                Center</h1>
+            <p style="margin: 4px 0 0; color: #64748B; font-size: 14px;">Manage system configurations and monitor
+                platform telemetry.</p>
+        </div>
+        <div class="admin-tabs" id="admin-tab-bar">
+            <button class="admin-tab-btn is-active" data-target="tab-config"><i class="fa fa-sliders"></i> AI & System
+                Config</button>
+            <button class="admin-tab-btn" data-target="tab-metrics"><i class="fa fa-line-chart"></i> Telemetry &
+                ROI</button>
+        </div>
+    </div>
+
+    <div id="tab-config" class="admin-tab-content is-active">
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;">
+
+            <div class="admin-card">
+                <div class="d-flex justify-content-between align-items-center"
+                    style="border-bottom: 1px solid #E2E8F0; padding-bottom: 12px; margin-bottom: 16px;">
+                    <h3 style="font-size: 16px; font-weight: 700; margin: 0;">Margin & Risk Thresholds</h3>
+                    <button class="dr-btn-secondary btn-sm" id="btn-save-margin" title="Save Margin Thresholds"><i
+                            class="fa fa-save" style="font-size: 16px; color: #004A99;"></i></button>
+                </div>
+                <div class="form-group mb-3">
+                    <label style="color: #22C55E; font-weight: 700;">Target Margin (Green)</label>
+                    <div class="d-flex align-items-center gap-2">
+                        <span>></span><input type="number" id="setting-margin-target" class="dr-input" value="40"
+                            style="width: 100px;"><span>%</span>
+                    </div>
+                </div>
+                <div class="form-group mb-3">
+                    <label style="color: #F59E0B; font-weight: 700;">Warning Margin (Yellow)</label>
+                    <div class="d-flex align-items-center gap-2">
+                        <span id="ui-margin-yellow-display">30 to 40%</span>
+                        <span style="font-size: 11px; color: #64748B; margin-left: 8px;">(Calculated
+                            automatically)</span>
+                    </div>
+                </div>
+                <div class="form-group mb-0">
+                    <label style="color: #EF4444; font-weight: 700;">Critical Margin (Red)</label>
+                    <div class="d-flex align-items-center gap-2">
+                        <span>&lt;</span><input type="number" id="setting-margin-critical" class="dr-input" value="30"
+                            style="width: 100px;"><span>%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-card">
+                <div class="d-flex justify-content-between align-items-center"
+                    style="border-bottom: 1px solid #E2E8F0; padding-bottom: 12px; margin-bottom: 16px;">
+                    <h3 style="font-size: 16px; font-weight: 700; margin: 0;">Workflow & Routing</h3>
+                    <button class="dr-btn-secondary btn-sm" id="btn-save-routing" title="Save Routing Settings"><i
+                            class="fa fa-save" style="font-size: 16px; color: #004A99;"></i></button>
+                </div>
+                <div class="form-group mb-4">
+                    <label>Deal Desk Notification Email</label>
+                    <input type="email" id="setting-routing-email" class="dr-input"
+                        placeholder="e.g. dealdesk@company.com">
+                    <span style="font-size: 11px; color: #64748B; margin-top: 4px; display: block;">Email triggered upon
+                        deal submission.</span>
+                </div>
+                <div class="form-group mb-0 p-3"
+                    style="background: #F8FAFC; border-radius: 8px; border: 1px dashed #CBD5E1;">
+                    <label style="font-size: 12px; font-weight: 700; color: #475569;">Target Submission SLA</label>
+                    <p style="margin: 4px 0 0; font-size: 13px; color: #64748B;">
+                        <i class="fa fa-calendar-check-o text-primary"></i>
+                        Dynamic. The required turnaround time is determined by the <strong>Review Deadline</strong>
+                        provided by the Sales Lead on the Submission form.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-card mb-5">
+            <div class="d-flex justify-content-between align-items-center"
+                style="border-bottom: 1px solid #E2E8F0; padding-bottom: 12px; margin-bottom: 16px;">
+                <div>
+                    <h3 style="font-size: 16px; font-weight: 700; margin: 0;">Document Governance Matrix</h3>
+                    <p style="margin: 4px 0 0; font-size: 12px; color: #64748B;">Define required attachments based on
+                        commercial model.</p>
+                </div>
+                <button class="dr-btn-secondary btn-sm" id="btn-save-matrix" title="Save Document Matrix"><i
+                        class="fa fa-save" style="font-size: 16px; color: #004A99;"></i></button>
+            </div>
+
+            <table class="admin-table" style="font-size: 13px;" id="doc-matrix-table">
+                <thead>
+                    <tr>
+                        <th>Document Type</th>
+                        <th>T&M</th>
+                        <th>T&M NTE</th>
+                        <th>Fixed Capacity</th>
+                        <th>Fixed Fee</th>
+                        <th style="width: 40px;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+
+            <div class="d-flex align-items-center gap-2 mt-4 p-3"
+                style="background: #F8FAFC; border-radius: 8px; border: 1px dashed #CBD5E1;">
+                <input type="text" id="new-doc-name" class="dr-input" placeholder="e.g. Security Questionnaire"
+                    style="max-width: 250px; margin-bottom: 0;">
+                <button class="btn-submit" id="btn-add-doc-type"
+                    style="white-space: nowrap; padding: 8px 16px; margin: 0;"><i class="fa fa-plus"></i> Add Document
+                    Category</button>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 style="font-size: 18px; font-weight: 700; margin: 0;">AI Contract Standards</h2>
+            <button class="btn-submit" id="btn-add-standard"><i class="fa fa-plus"></i> Add New Standard</button>
+        </div>
+
+        <div class="admin-card mb-5" style="padding: 0; overflow: hidden;">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th class="dr-sortable" data-sort="SECTION_TITLE">Section Title <i class="fa fa-sort"></i></th>
+                        <th class="dr-sortable" data-sort="NAME">Standard Name <i class="fa fa-sort"></i></th>
+                        <th class="dr-sortable" data-sort="BASELINE">Standard <i class="fa fa-sort"></i></th>
+                        <th class="dr-sortable" data-sort="PROMPT">Audit Reaction <i class="fa fa-sort"></i></th>
+                        <th class="dr-sortable" data-sort="CATEGORY">Category <i class="fa fa-sort"></i></th>
+                        <th class="dr-sortable" data-sort="RISK_TRIGGER">Requirement Level <i class="fa fa-sort"></i></th>
+                        <th style="text-align: right;">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="config-grid-body">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="tab-metrics" class="admin-tab-content" style="display: none;">
+        <div class="admin-card mb-4" style="background: #F8FAFC; border: 1px solid #E2E8F0;">
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <i class="fa-solid fa-bolt text-warning"></i>
+                <h3
+                    style="font-size: 14px; font-weight: 700; margin: 0; text-transform: uppercase; letter-spacing: 0.5px; color: #475569;">
+                    Requires Attention</h3>
+            </div>
+
+            <div class="grid-stats" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px;">
+                <div
+                    style="background: white; padding: 16px; border-radius: 8px; border: 1px solid #E2E8F0; display: flex; align-items: center; justify-content: space-between;">
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <span style="font-weight: 800; font-size: 14px; color: #1E293B;">Active Review Queue</span>
+                        </div>
+                        <p class="text-xs text-muted mb-0">Deals submitted and awaiting board decision.</p>
+                    </div>
+                    <a href="/dealreviewboard" style="text-decoration: none;" title="Go to Deal Review Board">
+                        <span class="badge-pill-success action-hover-pill"
+                            style="font-size: 20px; padding: 8px 16px; cursor: pointer; display: inline-block;">
+                            <span id="metric-active-queue">
+                                <div class="shimmer is-loading"
+                                    style="height: 20px; width: 30px; border-radius: 4px; display: inline-block;"></div>
+                            </span>
+                            <i class="fa fa-arrow-right" style="font-size: 14px; margin-left: 8px;"></i>
+                        </span>
+                    </a>
+                </div>
+
+                <div
+                    style="background: white; padding: 16px; border-radius: 8px; border: 1px solid #E2E8F0; display: flex; align-items: center; justify-content: space-between;">
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <span style="font-weight: 800; font-size: 14px; color: #1E293B;">AI Manual Overrides</span>
+                            <span class="badge-risk-v2"
+                                style="background: #FEF3C7; color: #B45309; font-size: 10px;">REVIEW NEEDED</span>
+                        </div>
+                        <p class="text-xs text-muted mb-0">Sales reps justified skipping an AI recommendation.</p>
+                    </div>
+                    <button class="dr-btn-secondary" id="btn-view-overrides"
+                        style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 6px 16px; font-size: 13px; font-weight: 600; white-space: nowrap; height: 36px; border-radius: 6px; border: 1px solid #CBD5E1;">
+                        View Logs <i class="fa fa-folder-open-o"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-stats mb-4"
+            style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px;">
+            <div class="stat-card-v2" style="border-top: 4px solid #22C55E; display: flex; flex-direction: column;">
+                <div>
+                    <p class="section-label">Total Value Protected (YTD)
+                        <span class="info-tip"
+                            data-tooltip="Sum of all estimated savings captured in Impact Logs. Goal: Maximize protection by identifying non-standard risks.">?</span>
+                    </p>
+                    <div class="stat-value text-success" id="metric-roi-value">$0</div>
+                    <p class="text-xs text-muted mt-2" id="metric-roi-count">Based on 0 Impact Logs</p>
+                </div>
+            </div>
+
+            <div class="stat-card-v2" style="display: flex; flex-direction: column;">
+                <div>
+                    <p class="section-label">Pipeline Governed</p>
+                    <div class="stat-value" id="metric-pipeline-governed">
+                        <div class="shimmer is-loading" style="height: 32px; width: 60%; border-radius: 4px;"></div>
+                    </div>
+                    <p class="text-xs text-muted mt-1">Total financial exposure</p>
+                </div>
+                <div class="mt-4 flex-grow-1">
+                    <p class="text-xs font-bold text-uppercase text-muted mb-2 letter-spacing-1"
+                        style="font-size: 10px;">Pipeline by Sales Leader</p>
+                    <div id="pipeline-leader-chart"></div>
+                </div>
+            </div>
+
+            <div class="stat-card-v2" style="display: flex; flex-direction: column;">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p class="section-label">Average Deal Size</p>
+                        <div class="stat-value" id="metric-avg-deal-size">
+                            <div class="shimmer is-loading" style="height: 32px; width: 60%; border-radius: 4px;"></div>
+                        </div>
+                    </div>
+                    <div class="text-right d-flex align-items-center justify-content-end gap-2">
+                        <p class="section-label mb-0">Avg Margin</p>
+                        <button class="btn btn-link p-0" id="btn-expand-chart" style="color: #64748B; font-size: 14px;"
+                            title="Expand Chart"><i class="fa fa-expand"></i></button>
+                    </div>
+                </div>
+                <div class="mt-4 flex-grow-1 d-flex flex-column justify-content-end">
+                    <p class="text-xs font-bold text-uppercase text-muted mb-2 letter-spacing-1"
+                        style="font-size: 10px;">Deal Margin as percentage of Total Value</p>
+                    <div id="deal-stack-chart"
+                        style="height: 100px; display: flex; align-items: flex-end; gap: 4px; border-bottom: 1px solid #E2E8F0; padding-bottom: 2px;">
+                        <div class="shimmer is-loading" style="height: 100%; width: 100%; border-radius: 4px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card-v2" style="display: flex; flex-direction: column;">
+                <div>
+                    <p class="section-label">Highest Client Exposure</p>
+                </div>
+                <div class="mt-2 flex-grow-1">
+                    <div id="client-exposure-chart">
+                        <div class="mb-3">
+                            <div class="shimmer is-loading" style="height: 14px; width: 100%; border-radius: 4px;">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="shimmer is-loading" style="height: 14px; width: 70%; border-radius: 4px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px;">
+            <div class="admin-card">
+                <h3
+                    style="font-size: 16px; font-weight: 700; border-bottom: 1px solid #E2E8F0; padding-bottom: 12px; margin-bottom: 16px;">
+                    Submission Health</h3>
+
+                <div class="metric-row">
+                    <span>Avg. Draft Completeness <span class="info-tip"
+                            data-tooltip="Measures how much data is entered before submission. Low scores indicate users are struggling with field requirements.">?</span></span>
+                    <span class="badge-pill-success" id="metric-completeness">--%</span>
+                </div>
+
+                <div class="metric-row">
+                    <span>Total Rejection Cycles <span class="info-tip"
+                            data-tooltip="Total number of kickbacks. High counts indicate 'Trial by Board' behavior where reps submit low-quality data to see what sticks.">?</span></span>
+                    <span class="badge-risk-v2" id="metric-reject-rate">--</span>
+                </div>
+
+                <div class="metric-row">
+                    <span>Exception Request Rate <span class="info-tip"
+                            data-tooltip="Percentage of deals requiring non-standard approval. Goal: <15%. High rates suggest our core policies may be too rigid for the market.">?</span></span>
+                    <span class="badge-risk-v2" id="metric-surprise-rate">--%</span>
+                </div>
+
+                <div class="metric-row">
+                    <span>High Risk Profiles <span class="info-tip"
+                            data-tooltip="Deals flagged with High Tech or Resource risk. Monitor for capacity planning and technical debt.">?</span></span>
+                    <span class="badge-risk-v2" id="metric-high-risk">--%</span>
+                </div>
+            </div>
+
+            <div class="admin-card">
+                <h3
+                    style="font-size: 16px; font-weight: 700; border-bottom: 1px solid #E2E8F0; padding-bottom: 12px; margin-bottom: 16px;">
+                    AI & Governance Health</h3>
+
+                <div class="metric-row">
+                    <span>AI Clean Rate <span class="info-tip"
+                            data-tooltip="% of docs passing AI audit without warnings. Measures how well Sales is aligning with our Contract Standards.">?</span></span>
+                    <span class="badge-pill-success" id="metric-ai-clean">--</span>
+                </div>
+
+                <div class="metric-row">
+                    <span>Manual Override Rate <span class="info-tip"
+                            data-tooltip="Rep justified an AI risk instead of fixing it. Threshold: >25% (Red). Action: Audit the prompt quality or Sales compliance.">?</span></span>
+                    <span class="badge-risk-v2" id="metric-ai-override">--</span>
+                </div>
+
+                <div class="mt-3">
+                    <span
+                        style="font-size: 11px; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px;">Most
+                        Flagged Standards</span>
+                    <div id="ai-pareto-chart" class="mt-2"></div>
+                </div>
+            </div>
+
+            <div class="admin-card">
+                <h3
+                    style="font-size: 16px; font-weight: 700; border-bottom: 1px solid #E2E8F0; padding-bottom: 12px; margin-bottom: 16px;">
+                    Review Board Value Measures</h3>
+
+                <h4 class="text-xs font-bold text-uppercase text-muted mb-3 letter-spacing-1 mt-3"
+                    style="font-size: 10px;">Highest Financial Impact</h4>
+                <div id="impact-deals-chart">
+                    <div class="mb-3">
+                        <div class="shimmer is-loading" style="height: 14px; width: 100%; border-radius: 4px;"></div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="shimmer is-loading" style="height: 14px; width: 70%; border-radius: 4px;"></div>
+                    </div>
+                </div>
+
+                <hr style="margin: 24px 0; border-top: 1px dashed #E2E8F0;">
+
+                <h4 class="text-xs font-bold text-uppercase text-muted mb-3 letter-spacing-1" style="font-size: 10px;">
+                    Top Risk Categories Avoided</h4>
+                <div id="impact-categories-chart">
+                    <div class="mb-3">
+                        <div class="shimmer is-loading" style="height: 14px; width: 100%; border-radius: 4px;"></div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="shimmer is-loading" style="height: 14px; width: 70%; border-radius: 4px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-card mt-5" style="background: #F8FAFC; border: 1px solid #E2E8F0;">
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <i class="fa-solid fa-circle-info text-primary"></i>
+                <h3
+                    style="font-size: 14px; font-weight: 700; margin: 0; text-transform: uppercase; letter-spacing: 0.5px; color: #475569;">
+                    Dataverse Authoritative Systems</h3>
+            </div>
+
+            <div class="grid-stats" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px;">
+                <div style="background: white; padding: 16px; border-radius: 8px; border: 1px solid #E2E8F0;">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <span style="font-weight: 800; font-size: 12px; color: #1E293B;">SALESFORCE</span>
+                        <span class="badge-risk-v2"
+                            style="background: #FEE2E2; color: #B91C1C; font-size: 9px;">DISCONNECTED</span>
+                    </div>
+                    <p class="text-xs text-muted mb-0">Authoritative for Sales Funnel, Opportunity Stage, and Customer
+                        Relationship data.</p>
+                </div>
+
+                <div style="background: white; padding: 16px; border-radius: 8px; border: 1px solid #E2E8F0;">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <span style="font-weight: 800; font-size: 12px; color: #1E293B;">KANTATA</span>
+                        <span class="badge-risk-v2"
+                            style="background: #FEE2E2; color: #B91C1C; font-size: 9px;">DISCONNECTED</span>
+                    </div>
+                    <p class="text-xs text-muted mb-0">Authoritative for Delivery Platform metrics, Resource
+                        allocations, and Financial actuals.<br><strong
+                            style="color: #004A99; display: block; margin-top: 6px;"><i
+                                class="fa fa-calendar-check-o"></i> Go live estimated June 30</strong></p>
+                </div>
+
+                <div style="background: white; padding: 16px; border-radius: 8px; border: 1px solid #E2E8F0;">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <span style="font-weight: 800; font-size: 12px; color: #1E293B;">3CI ESTIMATOR</span>
+                        <span class="badge-risk-v2"
+                            style="background: #FEE2E2; color: #B91C1C; font-size: 9px;">DISCONNECTED</span>
+                    </div>
+                    <p class="text-xs text-muted mb-0">Authoritative for Financial Modeling and multi-scenario deal
+                        simulations.</p>
+                </div>
+            </div>
+            <p class="text-2xs text-muted mt-3 mb-0" style="text-align: right;">System Integrations are managed via
+                Power Automate Environment Variables.</p>
+        </div>
+    </div>
+
+    <div class="panel-overlay" id="admin-panel-overlay"></div>
+    <div class="ai-panel" id="admin-slide-panel">
+        <div class="ai-panel-header d-flex justify-content-between align-items-center">
+            <h3 id="panel-title" style="margin: 0; font-weight: 800; font-size: 18px;">Edit Contract Standard</h3>
+            <button id="btn-close-panel-x"
+                style="background: none; border: none; font-size: 20px; cursor: pointer; color: #64748B;">&times;</button>
+        </div>
+        <div class="ai-panel-body">
+            <div class="form-group">
+                <label>Category</label>
+                <select class="dr-select" id="std-category">
+                    <option value="121500000">Universal</option>
+                    <option value="121500001">Conditional</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Model Type (If Conditional)</label>
+                <select class="dr-select" id="std-modeltype">
+                    <option value="">-- Applies to All --</option>
+                    <option value="121500000">T&M</option>
+                    <option value="121500001">T&M NTE</option>
+                    <option value="121500002">Fixed Capacity</option>
+                    <option value="121500003">Fixed Fee</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Standard Name</label>
+                <input type="text" class="dr-input" id="std-name" placeholder="e.g. Standard Payment Terms">
+            </div>
+            <div class="form-group">
+                <label>Acceptable Baseline</label>
+                <input type="text" class="dr-input" id="std-baseline" placeholder="e.g. Net 30">
+            </div>
+            <div class="form-group">
+                <label>Requirement Level</label>
+                <select class="dr-select" id="std-risk">
+                    <option value="121500000">Mandatory</option>
+                    <option value="121500001">Optional</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>AI Prompt Instruction (System Prompt)</label>
+                <textarea class="dr-textarea" id="std-prompt"
+                    placeholder="Provide exact instructions for the LLM on how to evaluate this clause..."></textarea>
+            </div>
+        </div>
+        <div class="ai-panel-footer action-group justify-content-end">
+            <button class="dr-btn-secondary" id="btn-cancel-panel">Cancel</button>
+            <button class="btn-submit" id="btn-save-standard" style="opacity: 1;">Save Standard</button>
+        </div>
+
+        <div id="expanded-chart-overlay"
+            style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.7); z-index: 9998; backdrop-filter: blur(4px);">
+        </div>
+
+        <div id="expanded-chart-modal"
+            style="display: none; position: fixed; top: 5%; left: 5%; width: 90%; height: 90%; background: white; z-index: 9999; border-radius: 12px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); flex-direction: column; overflow: hidden;">
+            <div class="d-flex justify-content-between align-items-center"
+                style="padding: 20px 24px; border-bottom: 1px solid #E2E8F0; background: #F8FAFC;">
+                <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #1E293B;"><i
+                        class="fa fa-bar-chart text-primary" style="margin-right: 8px;"></i> Deal Margin vs Cost
+                    Distribution</h2>
+                <div class="d-flex align-items-center" style="gap: 16px;">
+                    <select id="chart-time-filter" class="dr-select"
+                        style="margin: 0; min-width: 160px; padding: 6px 12px; height: auto;">
+                        <option value="4months" selected>Last 4 Months</option>
+                        <option value="quarter">This Quarter</option>
+                        <option value="ytd">This Year (YTD)</option>
+                        <option value="all">All Time</option>
+                    </select>
+                    <button id="btn-close-chart-modal"
+                        style="background: none; border: none; font-size: 28px; line-height: 1; cursor: pointer; color: #64748B;">&times;</button>
+                </div>
+            </div>
+            <div
+                style="flex-grow: 1; padding: 40px; display: flex; flex-direction: column; justify-content: flex-end; background: #fff;">
+                <div id="expanded-deal-stack-chart"
+                    style="height: 100%; display: flex; align-items: flex-end; gap: 6px; border-bottom: 2px solid #CBD5E1;">
+                </div>
+            </div>
+        </div>
+        <div id="ai-override-modal"
+            style="display: none; position: fixed; top: 10%; left: 50%; transform: translateX(-50%); width: 80%; max-width: 900px; max-height: 80vh; background: white; z-index: 9999; border-radius: 12px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); flex-direction: column; overflow: hidden;">
+            <div class="d-flex justify-content-between align-items-center"
+                style="padding: 20px 24px; border-bottom: 1px solid #E2E8F0; background: #F8FAFC;">
+                <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #1E293B;"><i
+                        class="fa fa-robot text-warning" style="margin-right: 8px;"></i> AI Manual Overrides Log</h2>
+                <button id="btn-close-override-modal"
+                    style="background: none; border: none; font-size: 28px; line-height: 1; cursor: pointer; color: #64748B;">&times;</button>
+            </div>
+            <div style="flex-grow: 1; padding: 24px; overflow-y: auto;">
+                <table class="admin-table" style="font-size: 13px; margin: 0;">
+                    <thead>
+                        <tr>
+                            <th>Deal Name</th>
+                            <th>Flagged Standard</th>
+                            <th>Sales Rep Justification</th>
+                            <th style="width: 100px;">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-medium text-primary">Project Phoenix Redesign</td>
+                            <td>Limitation of Liability</td>
+                            <td class="text-muted"><i>"Client procurement flatly rejected our baseline. VP of Sales
+                                    approved the 2x cap via email."</i></td>
+                            <td>Oct 12</td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium text-primary">Global Rollout - Phase 2</td>
+                            <td>Payment Terms</td>
+                            <td class="text-muted"><i>"Standard Net 30 is impossible for this GEO. Agreed to Net 60 to
+                                    secure the Q4 commit."</i></td>
+                            <td>Oct 14</td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium text-primary">Data Migration Q1</td>
+                            <td>IP Ownership</td>
+                            <td class="text-muted"><i>"Custom development for their proprietary engine requires
+                                    joint-IP. Legal is aware."</i></td>
+                            <td>Oct 15</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>

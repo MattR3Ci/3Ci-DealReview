@@ -1,0 +1,68 @@
+<link rel="stylesheet" href="/dealreview-theme.css">
+<script src="https://kit.fontawesome.com/c88e59de26.js" crossorigin="anonymous"></script>
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+<script src="/deal-constants.js"></script>
+<script src="/UIComponents.js"></script>
+<script src="/SubmissionCalc.js"></script>
+<script src="/SubmissionUI.js"></script>
+<script src="/SubmissionService.js"></script>
+<script src="/SubmissionApp.js"></script>
+
+<div id="dr-submission-app" class="min-h-screen" style="background-color: var(--bg-app);">
+  
+    <header class="bg-white border-b" style="border-color: var(--border-default); position: relative; z-index: 10; width: 100%;">
+        <div style="max-width: 1600px; margin: 0 auto; padding: 0 48px; width: 100%;">
+            <div class="py-6 d-flex align-items-center justify-content-between" style="width: 100%;">
+                
+                <div class="header-title-group d-flex align-items-center gap-4">
+                    <div>
+                        <a href="/" id="btn-back-to-board" class="d-inline-flex align-items-center mb-1 text-muted text-decoration-none" style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; gap: 5px;">
+                            <i class="fa fa-arrow-left"></i> Back to Deal Board
+                        </a>
+                        <h1 id="display-deal-name" class="text-2xl font-bold mb-1" style="color: var(--text-primary); margin: 0; line-height: 1.2; max-width: 500px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            New Deal Submission
+                        </h1>
+                        <p id="display-deal-id" class="text-sm mb-0 font-bold" style="color: var(--brand-primary);">
+                            Create new deal
+                        </p>
+                    </div>
+
+                    <div style="height: 45px; width: 1px; background: var(--border-default);"></div>
+                    
+                    <div class="d-flex align-items-center gap-3">
+                        <div id="ui-progress-ring" class="d-flex align-items-center justify-content-center font-bold" style="width: 48px; height: 48px; border-radius: 50%; border: 2px solid #E2E8F0; color: #64748B; font-size: 14px;">
+                            0%
+                        </div>
+                        <div class="progress-block">
+                            <div class="text-xs font-bold text-muted text-uppercase" style="letter-spacing: 0.5px;">Required Fields</div>
+                            <div id="ui-fields-remaining" class="text-sm font-medium" style="color: #B91C1C;">Loading...</div>
+                            <span class="progress-label d-none" id="ui-progress-label">INCOMPLETE</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="header-actions d-flex align-items-center gap-3">
+                    <button id="btn-save-draft" class="dr-btn-secondary py-2 px-4 d-flex align-items-center gap-2" style="background: #fff; border: 1px solid var(--border-default); border-radius: 6px; font-weight: 600;">
+                        <i class="fa fa-save text-muted"></i> <span>Save Draft</span>
+                    </button>
+                    <button id="btn-submit" class="btn-submission py-2 px-4 d-flex align-items-center gap-2" disabled style="background: var(--brand-primary); color: #fff; border: none; border-radius: 6px; font-weight: 600; opacity: 0.6;">
+                        <i class="fa fa-paper-plane"></i> <span>Submit for Review</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main style="max-width: 1600px; margin: 0 auto; padding: 32px 48px; display: flex; align-items: flex-start; gap: 32px;">
+        
+        <aside id="sidebar-rail" style="flex: 0 0 320px; background: #fff; border: 1px solid var(--border-default); border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+            </aside>
+
+        <section style="flex: 1; background: #fff; border: 1px solid var(--border-default); border-radius: 8px; padding: 40px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); min-height: 600px;">
+            <div id="form-workspace" class="space-y-6">
+                </div>
+        </section>
+
+    </main>
+</div>

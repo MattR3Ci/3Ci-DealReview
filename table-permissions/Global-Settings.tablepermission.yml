@@ -1,0 +1,13 @@
+adx_append: true
+adx_appendto: true
+adx_create: true
+adx_delete: true
+adx_entitylogicalname: ci_dr_globalsetting
+adx_entityname: Global Settings
+adx_entitypermission_webrole:
+- 4235de4a-0fa9-4749-a863-22e128e03359
+- 4716f7fd-f49e-4804-9c75-931426092bc8
+adx_entitypermissionid: aa6769e8-9b1c-f111-8341-000d3a5b0b5c
+adx_read: true
+adx_scope: 756150000
+adx_write: true

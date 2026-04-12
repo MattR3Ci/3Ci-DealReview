@@ -1,0 +1,14 @@
+- adx_managecontentsnippets: true
+  adx_managesitemarkers: true
+  adx_manageweblinksets: true
+  adx_name: Administrative permissions for Basic Portal
+  adx_previewunpublishedentities: true
+  adx_websiteaccess_webrole:
+  - 4716f7fd-f49e-4804-9c75-931426092bc8
+  adx_websiteaccessid: 30e9042d-2470-49fc-bbd7-01aaf7b6661a
+- adx_managecontentsnippets: false
+  adx_managesitemarkers: false
+  adx_manageweblinksets: false
+  adx_name: Preview permission for Basic Portal
+  adx_previewunpublishedentities: true
+  adx_websiteaccessid: cd67e87a-5622-44b5-a294-647cb2f031e0

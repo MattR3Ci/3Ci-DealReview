@@ -1,0 +1,10 @@
+adx_allcolumnpermissions:
+- 746610000
+- 746610001
+- 746610002
+adx_columnpermissionprofile_webrole:
+- 4235de4a-0fa9-4749-a863-22e128e03359
+- 4716f7fd-f49e-4804-9c75-931426092bc8
+adx_columnpermissionprofileid: d2ac6ac1-2d22-f111-8341-000d3a5b0b5c
+adx_profilename: AI Overrides
+adx_tablename: ci_ai_overrides

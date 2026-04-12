@@ -1,0 +1,58 @@
+{% extends 'layout_1_column' %}
+
+{% block main %}
+<style>
+    /* Kill the default Power Pages Title/Breadcrumb area */
+    .page-header,
+    .breadcrumb,
+    .page-copy {
+        display: none !important;
+    }
+
+    /* Force ONLY the main body container to be full width, leaving the Header alone */
+    #mainContent .container,
+    main .container {
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* Ensure our app wrapper takes over */
+    #document-governance-app-wrapper {
+        width: 100vw;
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
+</style>
+
+<link rel="stylesheet" href="/dealreview-theme.css">
+<script src="https://kit.fontawesome.com/c88e59de26.js" crossorigin="anonymous"></script>
+
+<script src="/deal-constants.js"></script>
+<script src="/dealreview-config.js"></script>
+<script src="/SubmissionService.js"></script>
+
+<script src="/DocumentGovernance.js"></script>
+
+<div id="document-governance-app"></div>
+
+<script>
+    $(document).ready(function () {
+        const initApp = () => {
+            if (window.DocumentGovernanceApp && window.SCHEMA) {
+                // ... same init logic ...
+                let rid = "{{ request.params['id'] }}";
+                if (!rid || rid === "null") rid = new URLSearchParams(window.location.search).get('id');
+
+                window.DocumentGovernanceApp.init({
+                    mountPoint: '#document-governance-app',
+                    recordId: rid
+                });
+            } else {
+                setTimeout(initApp, 50);
+            }
+        };
+        initApp();
+    });
+</script>
+{% endblock %}

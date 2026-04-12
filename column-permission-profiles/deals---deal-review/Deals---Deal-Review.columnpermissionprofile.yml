@@ -1,0 +1,10 @@
+adx_allcolumnpermissions:
+- 746610000
+- 746610001
+- 746610002
+adx_columnpermissionprofile_webrole:
+- 4235de4a-0fa9-4749-a863-22e128e03359
+- 4716f7fd-f49e-4804-9c75-931426092bc8
+adx_columnpermissionprofileid: ebf15575-360d-f111-8406-000d3a5b0b5c
+adx_profilename: Deals - Deal Review
+adx_tablename: ci_deals
