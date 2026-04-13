@@ -97,38 +97,7 @@ window.SecurityUtils = {
 
             try {
                 const rawDeals = await window.SubmissionService.loadAllDeals();
-                const F = window.SCHEMA.FIELDS.DEALS;
-
-                this.state.deals = rawDeals.map(d => {
-                    const spId = d[F.EXTERNALKEY];
-                    const rawTech = this.translateChoice('RISK_LEVELS', d[F.TECH_RISK]) || "LOW";
-                    const rawRes = this.translateChoice('RISK_LEVELS', d[F.RESOURCE_RISK]) || "LOW";
-                    const techRisk = String(rawTech).toUpperCase().trim();
-                    const resRisk = String(rawRes).toUpperCase().trim();
-
-                    let globalRisk = "LOW";
-                    if ([techRisk, resRisk].includes("HIGH")) {
-                        globalRisk = "HIGH";
-                    } else if ([techRisk, resRisk].includes("MEDIUM")) {
-                        globalRisk = "MEDIUM";
-                    }
-
-                    return {
-                        guid: d[F.DEALID],
-                        spId: spId,
-                        rawSourceData: d,
-                        id: d[F.TITLE]?.includes('-') ? d[F.TITLE].split('-').pop() : `ID-${spId}`,
-                        name: d[F.TITLE] || "Untitled Deal",
-                        clientName: d[F.CLIENT_TEXT] || "No Client Assigned",
-                        totalValue: d[F.VALUE] || 0,
-                        status: d[F.STATUS],
-                        readinessScore: this.calculateReadiness(d),
-                        requiredFieldsRemaining: this.countRemainingFields(d),
-                        owner: d[F.SALES_LEADER] ? d[F.SALES_LEADER].split('@')[0] : "System",
-                        riskTier: globalRisk, 
-                        submissionDate: new Date(d[F.MODIFIED]).toLocaleDateString()
-                    };
-                });
+                this.state.deals = rawDeals.map(d => this.mapRawDealToState(d));
 
                 this.renderLayout();
                 this.render();
@@ -138,6 +107,42 @@ window.SecurityUtils = {
             } catch (err) {
                 console.error("❌ Init Failure:", err);
             }
+        },
+
+        mapRawDealToState: function (d) {
+            const F = window.SCHEMA.FIELDS.DEALS;
+            const spId = d[F.EXTERNALKEY];
+            
+            return {
+                guid: d[F.DEALID],
+                spId: spId,
+                rawSourceData: d,
+                id: d[F.TITLE]?.includes('-') ? d[F.TITLE].split('-').pop() : `ID-${spId}`,
+                name: d[F.TITLE] || "Untitled Deal",
+                clientName: d[F.CLIENT_TEXT] || "No Client Assigned",
+                totalValue: d[F.VALUE] || 0,
+                status: d[F.STATUS],
+                readinessScore: this.calculateReadiness(d),
+                requiredFieldsRemaining: this.countRemainingFields(d),
+                owner: d[F.SALES_LEADER] ? d[F.SALES_LEADER].split('@')[0] : "System",
+                riskTier: this.calculateGlobalRisk(d), 
+                submissionDate: new Date(d[F.MODIFIED] || Date.now()).toLocaleDateString()
+            };
+        },
+
+        calculateGlobalRisk: function (d) {
+            const F = window.SCHEMA.FIELDS.DEALS;
+            const rawTech = this.translateChoice('RISK_LEVELS', d[F.TECH_RISK]) || "LOW";
+            const rawRes = this.translateChoice('RISK_LEVELS', d[F.RESOURCE_RISK]) || "LOW";
+            const techRisk = String(rawTech).toUpperCase().trim();
+            const resRisk = String(rawRes).toUpperCase().trim();
+
+            if ([techRisk, resRisk].includes("HIGH")) {
+                return "HIGH";
+            } else if ([techRisk, resRisk].includes("MEDIUM")) {
+                return "MEDIUM";
+            }
+            return "LOW";
         },
 
         processDocQueue: async function () {

@@ -1355,5 +1355,7 @@ const DocumentUI = {
     },
 };
 
+window.DocumentUI = DocumentUI;
+
 // Map to global window for init call in HTML
 window.DocumentGovernanceApp = DocumentApp;
