@@ -6,6 +6,38 @@
 // Mock the global window object
 global.window = global;
 
+// Mock jQuery (needed for shell deferreds)
+const createDeferred = () => {
+    const deferred = {
+        done: jest.fn().mockImplementation((callback) => {
+            deferred.doneCallback = callback;
+            return deferred;
+        }),
+        fail: jest.fn().mockImplementation((callback) => {
+            deferred.failCallback = callback;
+            return deferred;
+        }),
+        resolve: jest.fn().mockImplementation((val) => {
+            if (deferred.doneCallback) deferred.doneCallback(val);
+            return deferred;
+        }),
+        reject: jest.fn().mockImplementation((err) => {
+            if (deferred.failCallback) deferred.failCallback(err);
+            return deferred;
+        })
+    };
+    return deferred;
+};
+
+global.window.$ = global.window.jQuery = {
+    Deferred: createDeferred
+};
+
+// Mock Power Pages Shell
+global.window.shell = {
+    getTokenDeferred: jest.fn(() => createDeferred())
+};
+
 // Mock the SCHEMA based on deal-constants.js
 global.window.SCHEMA = {
     TABLES: {

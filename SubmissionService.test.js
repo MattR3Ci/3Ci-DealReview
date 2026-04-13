@@ -46,6 +46,11 @@ describe('SubmissionService', () => {
 
     describe('patchDeal', () => {
         test('should convert margin percentage to decimal (30 to 0.30)', async () => {
+            // Mock token success via shell
+            const deferred = window.shell.getTokenDeferred();
+            window.shell.getTokenDeferred.mockReturnValue(deferred);
+            deferred.done.mockImplementation((cb) => { cb("fake-token"); return deferred; });
+
             // Mock a successful PATCH response
             fetch.mockResolvedValue({
                 ok: true,

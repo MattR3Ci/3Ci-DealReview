@@ -68,5 +68,7 @@ const DealService = {
     }
 };
 
+window.DealService = DealService;
+
 // Immediate status check on load
 console.log("🛠️ DealService Loaded. Shell detection:", !!window.shell ? "✅ Ready" : "❌ Not Found");
