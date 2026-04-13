@@ -3,39 +3,31 @@
  * Mocks the Power Pages environment for Jest tests.
  */
 
-// Mock the global window object
+// 1. Core Browser Mocks
 global.window = global;
+global.window.location = { search: "", pathname: "/" };
+global.window.history = { replaceState: jest.fn() };
+global.window.scrollTo = jest.fn();
+global.sessionStorage = { getItem: jest.fn(), removeItem: jest.fn(), setItem: jest.fn() };
 
-// Mock jQuery Deferreds
+// 2. jQuery Mock Setup
 const createDeferred = () => {
     const deferred = {
-        done: jest.fn().mockImplementation((callback) => {
-            deferred.doneCallback = callback;
-            return deferred;
-        }),
-        fail: jest.fn().mockImplementation((callback) => {
-            deferred.failCallback = callback;
-            return deferred;
-        }),
-        resolve: jest.fn().mockImplementation((val) => {
-            if (deferred.doneCallback) deferred.doneCallback(val);
-            return deferred;
-        }),
-        reject: jest.fn().mockImplementation((err) => {
-            if (deferred.failCallback) deferred.failCallback(err);
-            return deferred;
-        })
+        done: jest.fn().mockImplementation((cb) => { deferred.doneCallback = cb; return deferred; }),
+        fail: jest.fn().mockImplementation((cb) => { deferred.failCallback = cb; return deferred; }),
+        resolve: jest.fn().mockImplementation((val) => { if (deferred.doneCallback) deferred.doneCallback(val); return deferred; }),
+        reject: jest.fn().mockImplementation((err) => { if (deferred.failCallback) deferred.failCallback(err); return deferred; })
     };
     return deferred;
 };
 
-// Mock DOM elements and jQuery functions
+// Create a SINGLE mock object that all jQuery calls return
 const mockJQueryObj = {
     html: jest.fn().mockReturnThis(),
     append: jest.fn().mockReturnThis(),
     prependTo: jest.fn().mockReturnThis(),
     off: jest.fn().mockReturnThis(),
-    on: jest.fn().mockReturnThis(),
+    on: jest.fn().mockReturnThis(), // We will spy on this in tests
     find: jest.fn().mockReturnThis(),
     hide: jest.fn().mockReturnThis(),
     show: jest.fn().mockReturnThis(),
@@ -58,143 +50,91 @@ const mockJQueryObj = {
 };
 
 global.window.$ = global.window.jQuery = jest.fn((selector) => {
-    if (typeof selector === 'function') {
-        selector(); // Handle $(document).ready()
-    }
+    if (typeof selector === 'function') { selector(); return mockJQueryObj; }
     return mockJQueryObj;
 });
 global.window.$.Deferred = createDeferred;
 
-// Mock Power Pages Shell
+// 3. Power Pages / Business Logic Mocks
 global.window.shell = {
     getTokenDeferred: jest.fn(() => createDeferred())
 };
 
-// Mock URLSearchParams
-global.URLSearchParams = class {
-    constructor(search) { this.search = search; }
-    get(param) { return null; }
-};
-
-// Mock window.location
-global.window.location = {
-    search: "",
-    pathname: "/"
-};
-
-// Mock window.history
-global.window.history = {
-    replaceState: jest.fn()
-};
-
-// Mock sessionStorage
-global.sessionStorage = {
-    getItem: jest.fn(),
-    removeItem: jest.fn(),
-    setItem: jest.fn()
-};
-
-// Mock the SCHEMA based on deal-constants.js
 global.window.SCHEMA = {
-    TABLES: {
-        DEALS: "ci_dealses",
-        AI_OVERRIDES: "ci_ai_overrideses"
-    },
+    TABLES: { DEALS: "ci_dealses", AI_OVERRIDES: "ci_ai_overrideses" },
     FIELDS: {
         DEALS: {
-            DEALID: "ci_dealsid",
-            EXTERNALKEY: "ci_externalprimarykey",
-            TITLE: "ci_title",
-            CLIENT_TEXT: "ci_clientaccountidtext",
-            TYPE: "ci_dealtype",
-            VALUE: "ci_totalvalue",
-            COMMERCIAL_MODEL: "ci_commercialmodel",
-            MARGIN: "ci_estimatedmargin",
-            PAYMENT_TERMS: "ci_paymentterms",
-            START_DATE: "ci_startdate",
-            BILLING_FREQ: "ci_billingfrequency",
-            SALES_LEADER: "ci_salesleaderemail",
-            DELIVERY_LEAD: "ci_deliveryleaderemail",
-            ACCOUNTABLE_EXEC: "ci_accountableexecutiveemail",
-            PARENT_LINK: "ci_parentcontract",
-            SF_LINK: "ci_salesforceopportunityid",
-            SF_STAGE: "ci_salesforcestage",
-            TECH_RISK: "ci_technicalrisk",
-            EXCEPTION_REQ: "ci_exceptionrequested",
-            STATUS: "ci_status"
+            DEALID: "ci_dealsid", EXTERNALKEY: "ci_externalprimarykey", TITLE: "ci_title",
+            CLIENT_TEXT: "ci_clientaccountidtext", TYPE: "ci_dealtype", VALUE: "ci_totalvalue",
+            DESCRIPTION: "ci_description", COMMERCIAL_MODEL: "ci_commercialmodel",
+            MARGIN: "ci_estimatedmargin", PAYMENT_TERMS: "ci_paymentterms",
+            START_DATE: "ci_startdate", BILLING_FREQ: "ci_billingfrequency",
+            SALES_LEADER: "ci_salesleaderemail", DELIVERY_LEAD: "ci_deliveryleaderemail",
+            ACCOUNTABLE_EXEC: "ci_accountableexecutiveemail", SOLUTIONS_LEADER: "ci_solutionsleaderemail",
+            PARENT_LINK: "ci_parentcontract", SF_LINK: "ci_salesforceopportunityid",
+            SF_STAGE: "ci_salesforcestage", TECH_RISK: "ci_technicalrisk",
+            EXCEPTION_REQ: "ci_exceptionrequested", STATUS: "ci_status"
         },
         CLIENTS: { ID: "ci_clientid", TITLE: "ci_title" },
-        GLOBAL_SETTINGS: { EMAIL: "ci_email" }
+        GLOBAL_SETTINGS: { EMAIL: "ci_email", MATRIX: "ci_matrix" },
+        AI_OVERRIDES: {
+            NAME: "ci_name", DEAL_ID: "ci_dealid", STANDARD_NAME: "ci_standardname",
+            JUSTIFICATION: "ci_justification", CREATED_ON: "ci_created_on"
+        }
     },
     CHOICES: {
         STATUS: { DRAFT: 0, SUBMITTED: 1, APPROVED: 2, REJECTED: 3 },
         DEAL_TYPES: { "SOW": 0, "Change Request": 1, "Extension": 2, "Support Retainer": 3 },
         RISK_LEVELS: { "Low": 0, "Medium": 1, "High": 2 }
     },
+    DOC_STATUS: { ALIGNED: "Aligned", MODIFIED_SUBMISSION: "Modified" },
     ENDPOINTS: {
-        GET_DOCUMENTS: "https://fake-flow-url.com",
-        NOTIFY_SUBMISSION: "https://fake-notify-url.com"
+        GET_DOCUMENTS: "https://f.com", NOTIFY_SUBMISSION: "https://f.com",
+        UPLOAD_DOCUMENT: "https://f.com", RUN_AI_AUDIT: "https://f.com",
+        PATCH_FILE_PROPERTIES: "https://f.com", DELETE_DOCUMENT: "https://f.com"
     }
 };
 
-// Mock any other UI components that SubmissionCalc calls
 global.window.UIComponents = {
     documentProgress: jest.fn(() => ({ isComplete: true })),
-    readinessStyles: jest.fn(() => ({ bg: '#fff', text: '#000', border: '#ccc' }))
+    readinessStyles: jest.fn(() => ({ bg: '#fff', text: '#000', border: '#ccc' })),
+    statusBadge: jest.fn(() => '<span></span>')
 };
 
-// Mock SubmissionUI
 global.window.SubmissionUI = {
-    renderSkeletons: jest.fn(),
-    renderSection: jest.fn(),
-    renderSidebar: jest.fn(),
-    showToast: jest.fn(),
-    showProcessingOverlay: jest.fn(),
-    components: {
-        formatCurrency: jest.fn(val => `$${val}`),
-        successOverlay: jest.fn()
-    }
+    renderSkeletons: jest.fn(), renderSection: jest.fn(), renderSidebar: jest.fn(),
+    showToast: jest.fn(), showProcessingOverlay: jest.fn(),
+    components: { formatCurrency: jest.fn(val => `$${val}`), successOverlay: jest.fn() }
 };
 
-// Mock SubmissionService
 global.window.SubmissionService = {
     loadGlobalSettings: jest.fn().mockResolvedValue({}),
     loadClients: jest.fn().mockResolvedValue([]),
-    getDealById: jest.fn(),
-    saveDraft: jest.fn(),
-    patchDeal: jest.fn(),
-    loadDocumentsViaFlow: jest.fn().mockResolvedValue([])
+    getDealById: jest.fn(), saveDraft: jest.fn(), patchDeal: jest.fn(),
+    loadDocumentsViaFlow: jest.fn().mockResolvedValue([]),
+    _getHeaders: jest.fn().mockResolvedValue({})
 };
 
-// Mock SecurityUtils
-global.window.SecurityUtils = {
-    checkLoginStatus: jest.fn().mockReturnValue(true)
+global.window.SecurityUtils = { checkLoginStatus: jest.fn().mockReturnValue(true), closeModal: jest.fn() };
+global.window.refreshUI = jest.fn();
+
+// 4. External Library Mocks
+global.Quill = jest.fn().mockImplementation(() => ({ on: jest.fn(), disable: jest.fn(), root: { innerHTML: "" } }));
+global.FileReader = class {
+    readAsDataURL(file) {
+        this.result = "data:image/png;base64,fake-base64";
+        setTimeout(() => { if (this.onload) this.onload(); }, 0);
+    }
 };
 
-// Mock Quill
-global.Quill = jest.fn().mockImplementation(() => ({
-    on: jest.fn(),
-    disable: jest.fn(),
-    root: { innerHTML: "" }
-}));
-
-global.window.model = {
-    globalSettings: {},
-    clients: []
-};
-
-// Mock document
+// 5. DOM Mocks
+global.window.model = { globalSettings: {}, clients: [] };
 global.document = {
-    body: {
-        insertAdjacentHTML: jest.fn()
-    },
+    body: { insertAdjacentHTML: jest.fn() },
     querySelectorAll: jest.fn(() => []),
     getElementById: jest.fn((id) => ({
-        addEventListener: jest.fn(),
-        remove: jest.fn(),
-        style: {},
-        getAttribute: jest.fn(),
-        setAttribute: jest.fn(),
+        addEventListener: jest.fn(), remove: jest.fn(), style: {},
+        getAttribute: jest.fn(), setAttribute: jest.fn(),
         classList: { add: jest.fn(), remove: jest.fn() }
     }))
 };

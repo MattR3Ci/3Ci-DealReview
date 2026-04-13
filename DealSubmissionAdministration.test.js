@@ -14,6 +14,24 @@ const app = global.window.AdminApp;
 
 describe('AdminApp', () => {
 
+    describe('calculatePerformanceMetrics', () => {
+        test('should calculate aggregated metrics correctly', () => {
+            const F = window.SCHEMA.FIELDS.DEALS;
+            const deals = [
+                { [F.VALUE]: 1000, [F.MARGIN]: 0.4, [F.CLIENT_TEXT]: "Client A", [F.SALES_LEADER]: "matt@3ci.tech" },
+                { [F.VALUE]: 2000, [F.MARGIN]: 0.3, [F.CLIENT_TEXT]: "Client B", [F.SALES_LEADER]: "bob@3ci.tech" }
+            ];
+
+            const result = app.calculatePerformanceMetrics(deals);
+            
+            expect(result.totalPipeline).toBe(3000);
+            expect(result.totalMarginDollars).toBe(1000); // (1000*0.4) + (2000*0.3) = 400+600 = 1000
+            expect(result.weightedAvgMargin).toBeCloseTo(33.3, 1);
+            expect(result.clientExposure["Client A"]).toBe(1000);
+            expect(result.leaderExposure["Matt Ranlett"]).toBe(1000);
+        });
+    });
+
     describe('_generateStackedChartHtml', () => {
         test('should correctly calculate bar heights', () => {
             const F = window.SCHEMA.FIELDS.DEALS;

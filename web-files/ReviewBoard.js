@@ -239,20 +239,7 @@ window.ImpactTracker = {
 
                 // 2. Fetch Deals & Filter
                 const rawDeals = await window.SubmissionService.loadAllDeals();
-                const S = window.SCHEMA.CHOICES.STATUS;
-                const F = window.SCHEMA.FIELDS.DEALS;
-
-                // Keep only "Submitted" deals and pre-calculate their readiness
-                this.state.deals = rawDeals
-                    .filter(d => d[F.STATUS] === S.SUBMITTED)
-                    .map(d => {
-                        const stats = window.SubmissionCalc.getGlobalProgress(d);
-                        return {
-                            ...d,
-                            readinessScore: stats.percent,
-                            marginBand: this._calculateMarginBand(d[F.MARGIN])
-                        };
-                    });
+                this.state.deals = this.getReviewReadyDeals(rawDeals);
 
                 // 3. Build the empty shell UI
                 this.renderLayout();
@@ -260,6 +247,7 @@ window.ImpactTracker = {
                 // 4. Check for URL deep link (from email) or load the first deal
                 const urlParams = new URLSearchParams(window.location.search);
                 const urlDealId = urlParams.get('dealId');
+                const F = window.SCHEMA.FIELDS.DEALS;
 
                 if (urlDealId && this.state.deals.some(d => d[F.DEALID] === urlDealId || String(d[F.EXTERNALKEY]) === urlDealId)) {
                     const targetDeal = this.state.deals.find(d => d[F.DEALID] === urlDealId || String(d[F.EXTERNALKEY]) === urlDealId);
@@ -281,6 +269,25 @@ window.ImpactTracker = {
         /* =========================================================
            3. DATA MANAGEMENT & LOGIC
            ========================================================= */
+        getReviewReadyDeals: function (rawDeals) {
+            const S = window.SCHEMA.CHOICES.STATUS;
+            const F = window.SCHEMA.FIELDS.DEALS;
+
+            return rawDeals
+                .filter(d => d[F.STATUS] === S.SUBMITTED)
+                .map(d => this.mapRawDealToState(d));
+        },
+
+        mapRawDealToState: function (d) {
+            const F = window.SCHEMA.FIELDS.DEALS;
+            const stats = window.SubmissionCalc ? window.SubmissionCalc.getGlobalProgress(d) : { percent: 0 };
+            return {
+                ...d,
+                readinessScore: stats.percent,
+                marginBand: this._calculateMarginBand(d[F.MARGIN])
+            };
+        },
+
         _calculateMarginBand: function (val) {
             const pct = (val || 0) * 100;
             

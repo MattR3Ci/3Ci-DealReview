@@ -42,6 +42,54 @@ describe('SubmissionCalc', () => {
         });
     });
 
+    describe('getRequiredDocs', () => {
+        test('should return empty array if no matrix string exists', () => {
+            window.model.globalSettings = {};
+            const result = calc.getRequiredDocs({});
+            expect(result).toEqual([]);
+        });
+
+        test('should return empty array if JSON parsing fails', () => {
+            window.model.globalSettings = { [window.SCHEMA.FIELDS.GLOBAL_SETTINGS.MATRIX]: "invalid-json" };
+            const result = calc.getRequiredDocs({});
+            expect(result).toEqual([]);
+        });
+
+        test('should filter docTypes based on the matrix rules', () => {
+            const matrix = {
+                rules: {
+                    "sow": { "TM": "Required", "FIXED_FEE": "Optional" }
+                },
+                docTypes: [
+                    { id: "sow", name: "Statement of Work" },
+                    { id: "msa", name: "Master Agreement", locked: true }
+                ]
+            };
+            window.model.globalSettings = { [window.SCHEMA.FIELDS.GLOBAL_SETTINGS.MATRIX]: JSON.stringify(matrix) };
+
+            // Case 1: T&M Model (Should require SOW and locked MSA)
+            const tmData = { [window.SCHEMA.FIELDS.DEALS.COMMERCIAL_MODEL]: 0 };
+            const tmResult = calc.getRequiredDocs(tmData);
+            expect(tmResult.length).toBe(2);
+
+            // Case 2: Fixed Fee Model (Should only require locked MSA)
+            const ffData = { [window.SCHEMA.FIELDS.DEALS.COMMERCIAL_MODEL]: 2 };
+            const ffResult = calc.getRequiredDocs(ffData);
+            expect(ffResult.length).toBe(1);
+            expect(ffResult[0].id).toBe("msa");
+        });
+    });
+
+    describe('getBasicsProgress', () => {
+        test('should call getGlobalProgress', () => {
+            const spy = jest.spyOn(calc, 'getGlobalProgress').mockReturnValue({ percent: 50 });
+            const result = calc.getBasicsProgress({});
+            expect(spy).toHaveBeenCalled();
+            expect(result.percent).toBe(50);
+            spy.mockRestore();
+        });
+    });
+
     describe('getGlobalProgress', () => {
         test('should return 17 percent for an empty deal (due to hardcoded risk:true)', () => {
             const progress = calc.getGlobalProgress({});

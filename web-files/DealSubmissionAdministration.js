@@ -543,6 +543,47 @@ window.AdminApp = {
     // METRIC RENDERING MODULES
     // ==========================================
 
+    calculatePerformanceMetrics: function (deals) {
+        const F_DEALS = window.SCHEMA.FIELDS.DEALS;
+        let totalPipeline = 0;
+        let totalMarginDollars = 0;
+        let clientExposure = {};
+        let leaderExposure = {};
+        let maxDealValue = 0;
+
+        deals.forEach(d => {
+            const val = parseFloat(d[F_DEALS.VALUE]) || 0;
+            totalPipeline += val;
+            if (val > maxDealValue) maxDealValue = val;
+
+            let marginPct = parseFloat(d[F_DEALS.MARGIN]) || 0;
+            if (marginPct > 1) marginPct = marginPct / 100;
+            totalMarginDollars += (val * marginPct);
+
+            const clientName = d[F_DEALS.CLIENT_TEXT] || "Unknown Client";
+            if (!clientExposure[clientName]) clientExposure[clientName] = 0;
+            clientExposure[clientName] += val;
+
+            let leaderRaw = d[F_DEALS.SALES_LEADER] || "Unassigned";
+            const leaderName = leaderRaw.split('@')[0].replace('.', ' ').replace(/\b\w/g, l => l.toUpperCase());
+            if (!leaderExposure[leaderName]) leaderExposure[leaderName] = 0;
+            leaderExposure[leaderName] += val;
+        });
+
+        const avgDealSize = deals.length > 0 ? (totalPipeline / deals.length) : 0;
+        const weightedAvgMargin = totalPipeline > 0 ? (totalMarginDollars / totalPipeline) * 100 : 0;
+
+        return {
+            totalPipeline,
+            totalMarginDollars,
+            maxDealValue,
+            avgDealSize,
+            weightedAvgMargin,
+            clientExposure,
+            leaderExposure
+        };
+    },
+
     _renderPerformanceMetrics: function (deals, notes, impacts, totalSaved) {
         const F_DEALS = window.SCHEMA.FIELDS.DEALS;
 
@@ -555,37 +596,8 @@ window.AdminApp = {
         $('#metric-active-queue').text(activeDeals.length);
 
         // --- CORE MATH & GROUPING ---
-        let totalPipeline = 0;
-        let totalMarginDollars = 0;
-        let clientExposure = {};
-        let leaderExposure = {};
-        let maxDealValue = 0;
-
-        deals.forEach(d => {
-            const val = parseFloat(d[F_DEALS.VALUE]) || 0;
-            totalPipeline += val;
-            if (val > maxDealValue) maxDealValue = val;
-
-            // Handle decimal margin (e.g., 0.43 = 43%)
-            let marginPct = parseFloat(d[F_DEALS.MARGIN]) || 0;
-            if (marginPct > 1) marginPct = marginPct / 100; // Failsafe if entered as whole numbers
-            totalMarginDollars += (val * marginPct);
-
-            // Group by Client
-            const clientName = d[F_DEALS.CLIENT_TEXT] || "Unknown Client";
-            if (!clientExposure[clientName]) clientExposure[clientName] = 0;
-            clientExposure[clientName] += val;
-
-            // Group by Sales Leader
-            let leaderRaw = d[F_DEALS.SALES_LEADER] || "Unassigned";
-            const leaderName = leaderRaw.split('@')[0].replace('.', ' ').replace(/\b\w/g, l => l.toUpperCase()); // Clean up email
-            if (!leaderExposure[leaderName]) leaderExposure[leaderName] = 0;
-            leaderExposure[leaderName] += val;
-        });
-
-        // --- TOP LEVEL METRICS ---
-        const avgDealSize = deals.length > 0 ? (totalPipeline / deals.length) : 0;
-        const weightedAvgMargin = totalPipeline > 0 ? (totalMarginDollars / totalPipeline) * 100 : 0;
+        const metrics = this.calculatePerformanceMetrics(deals);
+        const { totalPipeline, avgDealSize, weightedAvgMargin, leaderExposure } = metrics;
 
         $('#metric-pipeline-governed').text('$' + totalPipeline.toLocaleString(undefined, { maximumFractionDigits: 0 }));
         $('#metric-avg-deal-size').text('$' + avgDealSize.toLocaleString(undefined, { maximumFractionDigits: 0 }));

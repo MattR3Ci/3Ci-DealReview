@@ -227,6 +227,25 @@ const DocumentApp = {
         }
     },
 
+    formatFileSize: function (bytes) {
+        if (!bytes || isNaN(bytes)) return "0 KB";
+        const kb = bytes / 1024;
+        if (kb < 1024) return `${kb.toFixed(1)} KB`;
+        return `${(kb / 1024).toFixed(1)} MB`;
+    },
+
+    _calculateCategoryHealth: function (files) {
+        if (!files || files.length === 0) return "Missing";
+        const newest = [...files].sort((a, b) => new Date(b.uploadedDate) - new Date(a.uploadedDate))[0];
+        return newest.healthScore || "Pending";
+    },
+
+    _getModifiedDateLabel: function (dateStr) {
+        if (!dateStr) return "Never";
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    },
+
     loadDocuments: async function () {
         this.state.categories = this.buildCategorySchema();
         const mode = (window.DR_CONFIG?.runtime?.mode || "mock").toLowerCase();

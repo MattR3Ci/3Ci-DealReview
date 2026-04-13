@@ -174,25 +174,10 @@ const SubmissionApp = {
         $('#btn-submit').off('click').on('click', async () => {
             if (!confirm("Are you sure you want to submit this deal for review? This will lock the record.")) return;
 
-            const pendingDocs = (self.state.uploadedDocs || []).filter(doc =>
-                (doc.status || "").toLowerCase() !== "missing" &&
-                doc.healthScore === "Pending" &&
-                !doc.isExternalLink 
-            );
+            const pendingDocs = this.getPendingDocs();
 
             if (pendingDocs.length > 0) {
-                $('body').append(`
-                    <div id="ai-processing-shield" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(5px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999;">
-                        <div class="mb-4" style="font-size: 48px; color: #8B5CF6; animation: pulse 1.5s infinite;">
-                            <i class="fa fa-microchip"></i>
-                        </div>
-                        <h3 class="font-bold mb-2" style="color: #4C1D95;">Running AI Contract Review...</h3>
-                        <p class="text-muted text-sm mb-4">Scanning documents for commercial and legal compliance.</p>
-                        <div class="progress" style="width: 300px; height: 6px; border-radius: 3px;">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%; background-color: #8B5CF6;"></div>
-                        </div>
-                    </div>
-                `);
+                this._showAIShield();
 
                 const spId = self.state.spId || self.state.dealData[F.EXTERNALKEY];
                 const scanPromises = pendingDocs.map(doc => window.SubmissionService.runAIAudit(doc.id, spId));
@@ -276,24 +261,17 @@ const SubmissionApp = {
             const $el = $(e.target);
 
             if (fieldId === F.CLIENT_TEXT) {
-                const clients = window.model?.clients || [];
-                const clientFields = window.SCHEMA?.FIELDS?.CLIENTS || {};
-                const titleKey = clientFields.TITLE || "title";
-                const idKey = clientFields.ID || "id";
-
-                const match = clients.find(c => c[titleKey].toLowerCase() === value.toLowerCase().trim());
+                const result = this.findClientMatch(value);
                 self.state.dealData[F.CLIENT_TEXT] = value;
+                self.state.dealData.clientId = result.match ? result.match[window.SCHEMA.FIELDS.CLIENTS.ID || "id"] : "";
 
-                if (match) {
-                    self.state.dealData.clientId = match[idKey];
+                if (result.match) {
                     $('#add-client-prompt').hide();
                     $el.css('border-radius', 'var(--radius-sm)');
                 } else if (value.trim().length > 2) {
-                    self.state.dealData.clientId = "";
                     $('#add-client-prompt').show().find('strong').text(value.trim());
                     $el.css({ 'border-bottom-left-radius': '0', 'border-bottom-right-radius': '0' });
                 } else {
-                    self.state.dealData.clientId = "";
                     $('#add-client-prompt').hide();
                     $el.css('border-radius', 'var(--radius-sm)');
                 }
@@ -317,6 +295,37 @@ const SubmissionApp = {
         });
 
         this.bindNavEvents();
+    },
+
+    getPendingDocs: function () {
+        return (this.state.uploadedDocs || []).filter(doc =>
+            (doc.status || "").toLowerCase() !== "missing" &&
+            doc.healthScore === "Pending" &&
+            !doc.isExternalLink 
+        );
+    },
+
+    findClientMatch: function (value) {
+        const clients = window.model?.clients || [];
+        const clientFields = window.SCHEMA?.FIELDS?.CLIENTS || {};
+        const titleKey = clientFields.TITLE || "title";
+        const match = clients.find(c => c[titleKey].toLowerCase() === value.toLowerCase().trim());
+        return { match: match };
+    },
+
+    _showAIShield: function () {
+        $('body').append(`
+            <div id="ai-processing-shield" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(5px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999;">
+                <div class="mb-4" style="font-size: 48px; color: #8B5CF6; animation: pulse 1.5s infinite;">
+                    <i class="fa fa-microchip"></i>
+                </div>
+                <h3 class="font-bold mb-2" style="color: #4C1D95;">Running AI Contract Review...</h3>
+                <p class="text-muted text-sm mb-4">Scanning documents for commercial and legal compliance.</p>
+                <div class="progress" style="width: 300px; height: 6px; border-radius: 3px;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%; background-color: #8B5CF6;"></div>
+                </div>
+            </div>
+        `);
     },
 
     bindNavEvents: function () {
@@ -381,11 +390,7 @@ const SubmissionApp = {
     },
 
     applyRecordLock: function () {
-        const S = window.SCHEMA.CHOICES.STATUS;
-        const F = window.SCHEMA.FIELDS.DEALS;
-
-        const statusVal = parseInt(this.state.dealData[F.STATUS]);
-        const statusLabel = (statusVal === S.APPROVED) ? "APPROVED" : "SUBMITTED";
+        const statusLabel = this._getRecordLockLabel();
 
         $('#form-workspace input, #form-workspace select, #form-workspace textarea')
             .prop('disabled', true)
@@ -407,6 +412,29 @@ const SubmissionApp = {
                 </div>
             `).prependTo('#form-workspace');
         }
+    },
+
+    _getRecordLockLabel: function () {
+        const S = window.SCHEMA.CHOICES.STATUS;
+        const F = window.SCHEMA.FIELDS.DEALS;
+        const statusVal = parseInt(this.state.dealData[F.STATUS]);
+        return (statusVal === S.APPROVED) ? "APPROVED" : "SUBMITTED";
+    },
+
+    _isRecordLocked: function () {
+        const S = window.SCHEMA.CHOICES.STATUS;
+        const F = window.SCHEMA.FIELDS.DEALS;
+        const statusVal = parseInt(this.state.dealData[F.STATUS]);
+        return [S.SUBMITTED, S.APPROVED].includes(statusVal);
+    },
+
+    _canSubmit: function (sectionStats, docsComplete) {
+        return sectionStats.basics &&
+            sectionStats.commercial &&
+            sectionStats.dates &&
+            sectionStats.roles &&
+            sectionStats.salesforce &&
+            docsComplete;
     },
 
 updateHeaderMetrics: function () {
@@ -456,15 +484,8 @@ updateHeaderMetrics: function () {
             : { isComplete: false };
 
         const docsComplete = docProgress.isComplete;
-
-        const canSubmit = sectionStats.basics &&
-            sectionStats.commercial &&
-            sectionStats.dates &&
-            sectionStats.roles &&
-            sectionStats.salesforce &&
-            docsComplete;
-
-        const isLocked = [window.SCHEMA.CHOICES.STATUS.SUBMITTED, window.SCHEMA.CHOICES.STATUS.APPROVED].includes(parseInt(data[F.STATUS]));
+        const canSubmit = this._canSubmit(sectionStats, docsComplete);
+        const isLocked = this._isRecordLocked();
 
         if (isLocked) {
             $('#btn-save-draft, #btn-submit').hide().css('display', 'none', 'important');

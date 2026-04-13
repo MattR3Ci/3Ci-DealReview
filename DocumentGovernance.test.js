@@ -88,6 +88,27 @@ describe('DocumentGovernanceApp', () => {
             expect(app.state.selectedFileId).toBe('new');
         });
     });
+
+    describe('formatting and health', () => {
+        test('formatFileSize should handle bytes correctly', () => {
+            expect(app.formatFileSize(1024)).toBe("1.0 KB");
+            expect(app.formatFileSize(1048576)).toBe("1.0 MB");
+            expect(app.formatFileSize(0)).toBe("0 KB");
+        });
+
+        test('_calculateCategoryHealth should pick newest file health', () => {
+            const files = [
+                { uploadedDate: '2024-01-01', healthScore: 'Clean' },
+                { uploadedDate: '2024-02-01', healthScore: 'Warning' }
+            ];
+            expect(app._calculateCategoryHealth(files)).toBe('Warning');
+        });
+
+        test('_getModifiedDateLabel should format dates', () => {
+            expect(app._getModifiedDateLabel("2024-01-01")).toBe("Jan 1, 2024");
+            expect(app._getModifiedDateLabel(null)).toBe("Never");
+        });
+    });
 });
 
 describe('DocumentUI', () => {

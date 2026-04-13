@@ -1,0 +1,625 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Code coverage report for deal-constants.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="prettify.css" />
+    <link rel="stylesheet" href="base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="index.html">All files</a> deal-constants.js</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>0/1</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/0</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>0/0</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>0/1</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input type="search" id="fileSearch">
+            </div>
+        </template>
+    </div>
+    <div class='status-line low'></div>
+    <pre><table class="coverage">
+<tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
+<a name='L2'></a><a href='#L2'>2</a>
+<a name='L3'></a><a href='#L3'>3</a>
+<a name='L4'></a><a href='#L4'>4</a>
+<a name='L5'></a><a href='#L5'>5</a>
+<a name='L6'></a><a href='#L6'>6</a>
+<a name='L7'></a><a href='#L7'>7</a>
+<a name='L8'></a><a href='#L8'>8</a>
+<a name='L9'></a><a href='#L9'>9</a>
+<a name='L10'></a><a href='#L10'>10</a>
+<a name='L11'></a><a href='#L11'>11</a>
+<a name='L12'></a><a href='#L12'>12</a>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a>
+<a name='L117'></a><a href='#L117'>117</a>
+<a name='L118'></a><a href='#L118'>118</a>
+<a name='L119'></a><a href='#L119'>119</a>
+<a name='L120'></a><a href='#L120'>120</a>
+<a name='L121'></a><a href='#L121'>121</a>
+<a name='L122'></a><a href='#L122'>122</a>
+<a name='L123'></a><a href='#L123'>123</a>
+<a name='L124'></a><a href='#L124'>124</a>
+<a name='L125'></a><a href='#L125'>125</a>
+<a name='L126'></a><a href='#L126'>126</a>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a>
+<a name='L141'></a><a href='#L141'>141</a>
+<a name='L142'></a><a href='#L142'>142</a>
+<a name='L143'></a><a href='#L143'>143</a>
+<a name='L144'></a><a href='#L144'>144</a>
+<a name='L145'></a><a href='#L145'>145</a>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a>
+<a name='L148'></a><a href='#L148'>148</a>
+<a name='L149'></a><a href='#L149'>149</a>
+<a name='L150'></a><a href='#L150'>150</a>
+<a name='L151'></a><a href='#L151'>151</a>
+<a name='L152'></a><a href='#L152'>152</a>
+<a name='L153'></a><a href='#L153'>153</a>
+<a name='L154'></a><a href='#L154'>154</a>
+<a name='L155'></a><a href='#L155'>155</a>
+<a name='L156'></a><a href='#L156'>156</a>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a>
+<a name='L163'></a><a href='#L163'>163</a>
+<a name='L164'></a><a href='#L164'>164</a>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a>
+<a name='L167'></a><a href='#L167'>167</a>
+<a name='L168'></a><a href='#L168'>168</a>
+<a name='L169'></a><a href='#L169'>169</a>
+<a name='L170'></a><a href='#L170'>170</a>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a>
+<a name='L177'></a><a href='#L177'>177</a>
+<a name='L178'></a><a href='#L178'>178</a>
+<a name='L179'></a><a href='#L179'>179</a>
+<a name='L180'></a><a href='#L180'>180</a>
+<a name='L181'></a><a href='#L181'>181</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
+ * Deal Review Application - Schema Constants
+ * Finalized for Dataverse Virtual Table Sync
+ */
+<span class="cstat-no" title="statement not covered" >window.SCHEMA = {</span>
+    TABLES: { // silly plurals required by Dataverse
+        DEALS: "ci_dealses",
+        CLIENTS: "ci_clientaccountses",
+        REVIEW_HISTORY: "ci_reviewnoteses",
+        CONTRACT_STANDARDS: "ci_dr_contractstandardses",
+        GLOBAL_SETTINGS: "ci_dr_globalsettings",
+        AI_OVERRIDES: "ci_ai_overrideses",
+        DEAL_IMPACTS: "ci_deal_impactses"
+    },
+&nbsp;
+    FIELDS: {
+        DEALS: {
+            DEALID: "ci_dealsid",
+            EXTERNALKEY: "ci_externalprimarykey",
+            TITLE: "ci_title",
+            CLIENT_TEXT: "ci_clientaccountidtext",
+            TYPE: "ci_dealtype",
+            VALUE: "ci_totalvalue",
+            DESCRIPTION: "ci_description",
+            STATUS: "ci_status",
+            COMMERCIAL_MODEL: "ci_commercialmodel",
+            MARGIN: "ci_estimatedmargin",
+            PAYMENT_TERMS: "ci_paymentterms",
+            START_DATE: "ci_startdate",
+            END_DATE: "ci_enddate",
+            REVIEW_DEADLINE: "ci_reviewdeadline",
+            BILLING_FREQ: "ci_billingfrequency",
+            SALES_LEADER: "ci_salesleaderemail",
+            DELIVERY_LEAD: "ci_deliveryleaderemail",
+            SOLUTIONS_LEADER: "ci_salessolutionleaderemail",
+            ACCOUNTABLE_EXEC: "ci_accountableexecutiveemail",
+            EXCEPTION_REQ: "ci_exceptionrequested",
+            EXCEPTION_APP: "ci_exceptionapproved",
+            TECH_RISK: "ci_technicalrisk",
+            RESOURCE_RISK: "ci_resourcerisk",
+            PARENT_LINK: "ci_parentcontract",
+            SF_LINK: "ci_salesforceopportunityid",
+            SF_STAGE: "ci_salesforcestage",
+            MODIFIED: "ci_modified",
+            REVIEW_NOTES: "ci_reviewnotes",
+            ACTION_REQUIRED: "ci_actionrequired",
+            SUBMITTED_ON: "ci_submittedon",
+            FIRST_REVIEWED_ON: "ci_firstreviewedon"
+        },
+        CLIENTS: {
+            ID: "ci_clientaccountsid",
+            TITLE: "ci_title"
+        },
+        REVIEW_HISTORY: {
+            ID: "ci_reviewnotesid",
+            DEAL_ID: "ci_dealid",
+            DECISION: "ci_reviewdecision",
+            NOTES: "ci_reviewnotes",
+            ACTION: "ci_actionrequired",
+            DATE: "createdon"
+        },
+        CONTRACT_STANDARDS: {
+            ID: "ci_dr_contractstandardsid", // Updated with the extra 's'
+            NAME: "ci_name",
+            CATEGORY: "ci_category",
+            MODEL_TYPE: "ci_modeltype",          
+            BASELINE: "ci_standardtext",     
+            RISK_TRIGGER: "ci_requirementlevel", 
+            PROMPT: "ci_auditinstructions",
+            SECTION_TITLE: "ci_sectiontitle"
+        },
+        GLOBAL_SETTINGS: {
+            RECORD_ID: "e64fb735-0050-417c-bc23-3e689c699159",
+            TARGET_MARGIN: "ci_targetmargin",
+            CRITICAL_MARGIN: "ci_criticalmargin",
+            EMAIL: "ci_dealdeskemail",
+            MATRIX: "ci_documentmatrix"
+        },
+        AI_OVERRIDES: {
+            NAME: "ci_name", // Primary Name column (the one with the red asterisk)
+            DEAL_ID: "ci_dealid",
+            DEAL_VALUE: "ci_deal_value",
+            STANDARD_NAME: "ci_standardname",
+            JUSTIFICATION: "ci_justification",
+            CREATED_ON: "ci_created_on"
+        },
+        DEAL_IMPACTS: {
+            IMPACT_ID: "ci_dealimpactid",
+            DECISION_TYPE: "ci_decisiontype",
+            CATEGORIES: "ci_impactcategories",
+            VALUE_SAVED: "ci_estimatedvaluesaved",
+            NOTES: "ci_notes",
+            DEAL_BINDING: "ci_DealID@odata.bind"
+        }
+    },
+    CHOICES: {
+        STATUS: { DRAFT: 0, SUBMITTED: 1, APPROVED: 2, REJECTED: 3 },
+        DEAL_TYPES: { "SOW": 0, "Change Request": 1, "Extension": 2, "Support Retainer": 3 },
+        MODELS: { "T&amp;M": 0, "T&amp;M with not to exceed cap": 1, "Fixed Fee": 2, "Fixed Capacity": 3, "Retainer": 4 },
+        TERMS: { "Net 30": 0, "Net 45": 1, "Milestone-based": 2, "Pre-bill": 3 },
+        BILLING: { "Monthly": 0, "Quarterly": 1, "Milestone-based": 2, "Completion": 3, "Pre-bill": 4 },
+        RISK_LEVELS: { "Low": 0, "Medium": 1, "High": 2 },
+        SF_STAGES: { "Targeting": 0, "Prospecting": 1, "Discovery": 2, "Fulfillment/Proposal": 3, "Closed": 4 },
+        REVIEW_DECISION: { "Pending": 0, "Approve": 1, "Reject": 2 },
+        AI_HEALTH: {
+            CLEAN: "Clean",
+            WARNING: "Warning",
+            CRITICAL: "Critical Risk"
+        },
+        AI_REQUIREMENT: {
+            CRITICAL: "Critical",
+            MANDATORY: "Mandatory",
+            OPTIONAL: "Optional"
+        }
+    },
+&nbsp;
+    SHAREPOINT: {
+        LIST_NAME: "Deal Documents",
+        FIELDS: {
+            ID: "Id",
+            DEAL_ID: "DealID", // The Single Line of Text lookup
+            CATEGORY: "Document_x0020_Category",
+            STATUS: "Document_x0020_Status",
+            VERSION_TAG: "Version_x0020_Tag",
+            DESCRIPTION: "_ExtendedDescription",
+            // File System Properties
+            FILE: "File",
+            FILE_NAME: "File/Name",
+            FILE_SIZE: "File/Length",
+            FILE_MODIFIED: "File/TimeLastModified",
+            FILE_VERSION_LABEL: "File/UIVersionLabel",
+            EDITOR: "Editor",
+            EDITOR_TITLE: "Editor/Title",
+            // History Specific
+            CREATED: "Created",
+            CREATED_BY: "CreatedBy/Title",
+            HISTORY_ENCODED: {
+                VERSION_TAG: "Version_x005f_x0020_x005f_Tag",
+                STATUS: "Document_x005f_x0020_x005f_Status",
+                CATEGORY: "Document_x005f_x0020_x005f_Category",
+                MODIFIED_BY: "Modified_x005f_x0020_x005f_By"
+            }
+        }
+    },
+    DOC_CATEGORIES: {
+        SOW: { id: 'sow', name: 'Statement of Work', required: true },
+        MSA: { id: 'msa', name: 'Master Service Agreement', required: false },
+        PRICING: { id: 'pricing', name: 'Cost Model', required: true },
+        RESUME: { id: 'support', name: 'Supporting Material', required: false }
+    },
+&nbsp;
+    DOC_STATUS: {
+        ALIGNED: 'aligned',
+        MODIFIED_SUBMISSION: 'modified-submitted',
+        MODIFIED_APPROVAL: 'modified-approved',
+        MISSING: 'missing'
+    },
+&nbsp;
+    ENDPOINTS: {
+        SITE_URL: "https://cccitpeople.sharepoint.com/sites/3CI/Sales",
+&nbsp;
+        // PowerAutomate - api_GetDealDocumentsForDeal
+        GET_DOCUMENTS: "https://54c188175ea2e924951161a823cd57.12.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/0912bd22793e4ff9897484075ce180df/triggers/manual/paths/invoke?api-version=1&amp;sp=%2Ftriggers%2Fmanual%2Frun&amp;sv=1.0&amp;sig=_b92ZxFxYLBptYvLQcbb69eBIQTcQPTyecMQBmXyrEo",
+        // PowerAutomate - api_ReviewBoard-GetHistory
+        GET_VERSION_HISTORY: "https://54c188175ea2e924951161a823cd57.12.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/8170b4213df34c709744e443c6998d79/triggers/manual/paths/invoke?api-version=1&amp;sp=%2Ftriggers%2Fmanual%2Frun&amp;sv=1.0&amp;sig=4tBbgbdvbHFFioy13hXYvBB063fsjh2zJLCTonIivQI",
+        // PowerAutomate - api_UploadDocumentToSharePoint
+        UPLOAD_DOCUMENT: "https://54c188175ea2e924951161a823cd57.12.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/fbcb22e71fd94f6798731709ab4dfb54/triggers/manual/paths/invoke?api-version=1&amp;sp=%2Ftriggers%2Fmanual%2Frun&amp;sv=1.0&amp;sig=yTbS93FrLO55W85EDEtJTjN1HP4rfodHzEkEe3J6qdM",
+        // PowerAutomate - api_DeleteDocument
+        DELETE_DOCUMENT: "https://54c188175ea2e924951161a823cd57.12.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/adc6f94ef65c43afb4471c9bb7e877f7/triggers/manual/paths/invoke?api-version=1&amp;sp=%2Ftriggers%2Fmanual%2Frun&amp;sv=1.0&amp;sig=XbTfhLF-KrXhJLAiBTw08PlYe9rgIfcMR6pypdQrxGE",
+        // PowerAutomate - api_GetDocumentVersionHistory
+        GET_REVIEW_HISTORY: "https://54c188175ea2e924951161a823cd57.12.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/2739b7e2010b46faa30018cd8a28bf79/triggers/manual/paths/invoke?api-version=1&amp;sp=%2Ftriggers%2Fmanual%2Frun&amp;sv=1.0&amp;sig=E2dHGMfJLUppUuGbNOnM5fRanGbbiBTAbVni5e1h0K0",
+        // PowerAutomate - api_CreateReviewNote
+        RECORD_REVIEW_DECISION: "https://54c188175ea2e924951161a823cd57.12.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/377959f4ce864ffe900766bb01d04d51/triggers/manual/paths/invoke?api-version=1&amp;sp=%2Ftriggers%2Fmanual%2Frun&amp;sv=1.0&amp;sig=auUW50jl-fyi8-1mO-obScVqYy2OuqZ5ZLrburIv89k",
+        // PowerAutomate - api_AI_Audit
+        RUN_AI_AUDIT: "https://54c188175ea2e924951161a823cd57.12.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/074fb015dfac40ada1d110dfa60a8d22/triggers/manual/paths/invoke?api-version=1&amp;sp=%2Ftriggers%2Fmanual%2Frun&amp;sv=1.0&amp;sig=xY8UT0Zaq_UEj6iYbCXtvrYNctIa9eEnKyPakbTe-KQ",
+        // PowerAutomate - api_SaveUserResponseToAIAudit
+        PATCH_FILE_PROPERTIES: "https://54c188175ea2e924951161a823cd57.12.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/8af8309d8d8a441fb5a00b41fc03c712/triggers/manual/paths/invoke?api-version=1&amp;sp=%2Ftriggers%2Fmanual%2Frun&amp;sv=1.0&amp;sig=fIIxRQBm2amawzPodG5fktBeywIn6u3amtsKuv8yOWE",
+        // PowerAutomate - api_SendSubmissionEmail
+        NOTIFY_SUBMISSION: "https://54c188175ea2e924951161a823cd57.12.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/4c6d2bce64fb4bd98b16e52bc64c381d/triggers/manual/paths/invoke?api-version=1&amp;sp=%2Ftriggers%2Fmanual%2Frun&amp;sv=1.0&amp;sig=MbWSQkypKWTPPrxRpMPR1SsiXiQAdfmoPG8j-gIiMOc"
+    }
+};</pre></td></tr></table></pre>
+
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at 2026-04-13T20:39:27.266Z
+            </div>
+        <script src="prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="sorter.js"></script>
+        <script src="block-navigation.js"></script>
+    </body>
+</html>
+    

@@ -44,6 +44,28 @@ describe('ReviewBoardApp', () => {
         });
     });
 
+    describe('Data Logic', () => {
+        const F = window.SCHEMA.FIELDS.DEALS;
+        const S = window.SCHEMA.CHOICES.STATUS;
+
+        test('getReviewReadyDeals should filter only submitted deals', () => {
+            const raw = [
+                { [F.STATUS]: S.DRAFT, [F.TITLE]: 'Draft' },
+                { [F.STATUS]: S.SUBMITTED, [F.TITLE]: 'Ready' }
+            ];
+            const result = app.getReviewReadyDeals(raw);
+            expect(result.length).toBe(1);
+            expect(result[0][F.TITLE]).toBe('Ready');
+        });
+
+        test('mapRawDealToState should enrich deal with readiness and margin band', () => {
+            const raw = { [F.DEALID]: '1', [F.MARGIN]: 0.45 };
+            const mapped = app.mapRawDealToState(raw);
+            expect(mapped.readinessScore).toBe(85); // Mock value from top of file
+            expect(mapped.marginBand).toBe('target');
+        });
+    });
+
     describe('selectDeal', () => {
         test('should reset state and set active deal', async () => {
             const F = window.SCHEMA.FIELDS.DEALS;
