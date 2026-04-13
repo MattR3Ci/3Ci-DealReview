@@ -87,6 +87,16 @@ const SubmissionCalc = {
             commercialFilled = false;
         }
 
+        // --- NEW BUSINESS RULE (TDD) ---
+        // If Tech Risk is High, Exception must be requested.
+        let riskValid = true;
+        const RISK_LEVELS = window.SCHEMA.CHOICES.RISK_LEVELS || { High: 2 };
+        if (parseInt(data[FIELDS.TECH_RISK]) === RISK_LEVELS.High) {
+            if (!data[FIELDS.EXCEPTION_REQ]) {
+                riskValid = false;
+            }
+        }
+
         // Fixed: Pass 'data' to documentProgress so the matrix knows the commercial model!
         let isDocsComplete = false;
         if (window.UIComponents && window.UIComponents.documentProgress) {
@@ -105,7 +115,7 @@ const SubmissionCalc = {
                 this._isFieldFilled(data, FIELDS.DELIVERY_LEAD),
             salesforce: this._isFieldFilled(data, FIELDS.SF_LINK) &&
                 this._isFieldFilled(data, FIELDS.SF_STAGE),
-            risk: true,
+            risk: riskValid,
             documents: isDocsComplete 
         };
     },

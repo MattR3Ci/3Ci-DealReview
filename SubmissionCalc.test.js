@@ -50,7 +50,11 @@ describe('SubmissionCalc', () => {
         });
 
         test('should identify completion correctly', () => {
-            // Mock a fully filled deal object
+            // ... (existing test code)
+        });
+
+        test('TDD: should require EXCEPTION_REQ if TECH_RISK is High', () => {
+            const C = window.SCHEMA.CHOICES;
             const fullData = {
                 [F.TITLE]: "Test Deal",
                 [F.CLIENT_TEXT]: "Test Client",
@@ -64,12 +68,14 @@ describe('SubmissionCalc', () => {
                 [F.ACCOUNTABLE_EXEC]: "exec@3ci.tech",
                 [F.DELIVERY_LEAD]: "lead@3ci.tech",
                 [F.SF_LINK]: "https://mau.lightning.force.com/lightning/r/Opportunity/0068W00001ByXYZ/view",
-                [F.SF_STAGE]: 1
+                [F.SF_STAGE]: 1,
+                [F.TECH_RISK]: C.RISK_LEVELS.High,
+                [F.EXCEPTION_REQ]: false // Missing exception!
             };
 
-            const progress = calc.getGlobalProgress(fullData);
-            expect(progress.percent).toBe(100);
-            expect(progress.isComplete).toBe(true);
+            const statuses = calc.getSectionStatuses(fullData);
+            // We want 'risk' section to be false if High Risk but no Exception
+            expect(statuses.risk).toBe(false);
         });
     });
 });

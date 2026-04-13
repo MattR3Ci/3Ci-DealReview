@@ -8,6 +8,10 @@ global.window = global;
 
 // Mock the SCHEMA based on deal-constants.js
 global.window.SCHEMA = {
+    TABLES: {
+        DEALS: "ci_dealses",
+        AI_OVERRIDES: "ci_ai_overrideses"
+    },
     FIELDS: {
         DEALS: {
             TITLE: "ci_title",
@@ -15,6 +19,7 @@ global.window.SCHEMA = {
             TYPE: "ci_dealtype",
             VALUE: "ci_totalvalue",
             COMMERCIAL_MODEL: "ci_commercialmodel",
+            MARGIN: "ci_estimatedmargin",
             PAYMENT_TERMS: "ci_paymentterms",
             START_DATE: "ci_startdate",
             BILLING_FREQ: "ci_billingfrequency",
@@ -23,11 +28,24 @@ global.window.SCHEMA = {
             ACCOUNTABLE_EXEC: "ci_accountableexecutiveemail",
             PARENT_LINK: "ci_parentcontract",
             SF_LINK: "ci_salesforceopportunityid",
-            SF_STAGE: "ci_salesforcestage"
+            SF_STAGE: "ci_salesforcestage",
+            TECH_RISK: "ci_technicalrisk",
+            EXCEPTION_REQ: "ci_exceptionrequested"
+        },
+        AI_OVERRIDES: {
+            NAME: "ci_name",
+            DEAL_ID: "ci_dealid",
+            STANDARD_NAME: "ci_standardname",
+            JUSTIFICATION: "ci_justification",
+            CREATED_ON: "ci_created_on"
         }
     },
     CHOICES: {
-        DEAL_TYPES: { "SOW": 0, "Change Request": 1, "Extension": 2, "Support Retainer": 3 }
+        DEAL_TYPES: { "SOW": 0, "Change Request": 1, "Extension": 2, "Support Retainer": 3 },
+        RISK_LEVELS: { "Low": 0, "Medium": 1, "High": 2 }
+    },
+    ENDPOINTS: {
+        GET_DOCUMENTS: "https://fake-flow-url.com"
     }
 };
 
