@@ -131,18 +131,7 @@ window.SecurityUtils = {
         },
 
         calculateGlobalRisk: function (d) {
-            const F = window.SCHEMA.FIELDS.DEALS;
-            const rawTech = this.translateChoice('RISK_LEVELS', d[F.TECH_RISK]) || "LOW";
-            const rawRes = this.translateChoice('RISK_LEVELS', d[F.RESOURCE_RISK]) || "LOW";
-            const techRisk = String(rawTech).toUpperCase().trim();
-            const resRisk = String(rawRes).toUpperCase().trim();
-
-            if ([techRisk, resRisk].includes("HIGH")) {
-                return "HIGH";
-            } else if ([techRisk, resRisk].includes("MEDIUM")) {
-                return "MEDIUM";
-            }
-            return "LOW";
+            return window.DealReviewLogic.calculations.calculateGlobalRisk(d);
         },
 
         processDocQueue: async function () {
@@ -153,25 +142,15 @@ window.SecurityUtils = {
         },
 
         translateChoice: function (category, value) {
-            if (!value) return "Low";
-            const choices = window.SCHEMA.CHOICES[category];
-            const match = Object.keys(choices).find(key => choices[key] == value);
-            return match || value || "Low";
+            return window.DealReviewLogic.mappers.translateChoice(category, value);
         },
 
         calculateMarginBand: function (val) {
-            const pct = (val || 0) * 100;
-            if (pct >= 20) return 'premium';
-            if (pct >= 15) return 'standard';
-            if (pct > 0) return 'thin';
-            return 'loss';
+            return window.DealReviewLogic.mappers.calculateMarginBand(val);
         },
 
         getDaysAgo: function (dateStr) {
-            var date = new Date(dateStr);
-            var today = new Date();
-            var diffTime = Math.abs(today - date);
-            return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 0;
+            return window.DealReviewLogic.utils.getDaysAgo(dateStr);
         },
 
         getComponentStyles: function (type, key) {
@@ -206,14 +185,11 @@ window.SecurityUtils = {
 
         calculateReadiness: function (dealObject, uploadedDocs = []) {
             const sourceData = dealObject.rawSourceData || dealObject;
-            const stats = window.SubmissionCalc.getGlobalProgress(sourceData, uploadedDocs);
-            return stats.percent;
+            return window.DealReviewLogic.calculations.getGlobalProgress(sourceData, uploadedDocs).percent;
         },
 
         countRemainingFields: function (d) {
-            const F = window.SCHEMA.FIELDS.DEALS;
-            const required = [F.TITLE, F.CLIENT_TEXT, F.VALUE, F.START_DATE, F.SALES_LEADER];
-            return required.filter(f => !d[f]).length;
+            return window.DealReviewLogic.calculations.countRemainingFields(d);
         },
 
         lazyLoadDocCount: async function (guid, spId) {
@@ -455,96 +431,7 @@ window.SecurityUtils = {
         },
 
         renderDealCard: function (deal) {
-            const F = window.SCHEMA.FIELDS.DEALS;
-            const statusHtml = (window.UIComponents && window.UIComponents.statusBadge)
-                ? window.UIComponents.statusBadge(deal.status)
-                : `<span class="status-badge-v2">${deal.status}</span>`;
-
-            const readiness = window.UIComponents.readinessStyles(deal.readinessScore);
-            const margin = deal.marginBand ? this.getComponentStyles('margin', deal.marginBand) : null;
-
-            const rawData = deal[F.VALUE] || deal.value || deal.totalValue || deal.Value || "0";
-            const cleanNumberString = String(rawData).replace(/[^0-9.-]+/g, "");
-            const rawValue = parseFloat(cleanNumberString) || 0;
-
-            const displayValue = rawValue >= 1000000
-                ? `$${(rawValue / 1000000).toFixed(2)}M`
-                : `$${(rawValue / 1000).toFixed(1)}K`;
-
-            const riskTheme = this.getComponentStyles('risk', deal.riskTier) || this.getComponentStyles('risk', 'LOW');
-
-            const requiredTotalFromSchema = Object.values(window.SCHEMA.DOC_CATEGORIES).filter(c => c.required).length;
-
-            const docsComplete = deal.requiredDocsComplete !== undefined ? deal.requiredDocsComplete : 0;
-            const docsTotal = deal.requiredDocsTotal !== undefined ? deal.requiredDocsTotal : requiredTotalFromSchema;
-            const docColor = docsComplete === docsTotal ? '#1E7E34' : '#B45309';
-            const dealTypeLabel = window.SCHEMA.CHOICES.DEAL_TYPES ? Object.keys(window.SCHEMA.CHOICES.DEAL_TYPES).find(k => window.SCHEMA.CHOICES.DEAL_TYPES[k] === deal.rawSourceData[window.SCHEMA.FIELDS.DEALS.TYPE]) : "Deal";
-
-            return `
-            <div class="deal-card-v3" data-id="${deal.guid}" data-spid="${deal.spId}">
-                <div class="flex items-center justify-between mb-4 pb-4 border-b" style="border-color: var(--border-default);">
-                    ${statusHtml} 
-                    <div class="readiness-ring-v3" style="background:${readiness.bg}; border: 2px solid ${readiness.border}; color:${readiness.text};">
-                        ${deal.readinessScore}%
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <h3 class="font-bold mb-1" style="color: var(--text-primary); font-size: 16px; line-height: 1.2;">${deal.name}</h3>
-                    <p class="text-sm" style="color: var(--text-secondary); margin-bottom: 2px;">${deal.clientName}</p>
-                    <p class="text-2xs text-muted" style="margin-top: 0;">${deal.id} • ${dealTypeLabel}</p>
-                </div>
-
-                <div class="grid-2-col gap-3 mb-4 d-flex">
-                    <div class="flex-grow-1">
-                        <div class="section-label mb-1">TOTAL VALUE</div>
-                        <p class="text-lg font-bold" style="color: var(--text-primary);">${displayValue}</p>
-                    </div>
-                    <div>
-                        <div class="section-label mb-1 text-end">OWNER</div>
-                        <p class="text-sm font-medium text-end" style="color: var(--text-primary);">${deal.owner}</p>
-                    </div>
-                </div>
-
-                <div class="flex flex-wrap gap-2 mb-4">
-                    <span class="badge-risk-v2" style="background: ${riskTheme.bg}; color: ${riskTheme.text}; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700;">
-                        <i class="fa ${riskTheme.icon} mr-1"></i> ${deal.riskTier} RISK
-                    </span>
-                    
-                    ${margin ? `
-                        <div class="badge-margin-v2" style="background:${margin.bg}; color:${margin.color}; padding: 2px 8px; border-radius: 4px; display: flex; align-items: center; gap: 6px;">
-                            <span style="font-size: 10px; font-weight: 700; text-transform: uppercase;">${margin.label}</span>
-                            <span style="font-size: 11px; font-weight: 800;">${(deal.rawSourceData[window.SCHEMA.FIELDS.DEALS.MARGIN] * 100).toFixed(1)}%</span>
-                        </div>` : ''}
-                </div>
-
-                <div class="mb-4 doc-section">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="section-label">Required Documents</span>
-                        <span class="text-xs font-bold doc-count-text ${deal.isLoadingDocs === false ? '' : 'shimmer-text'}" style="color: ${docColor};">
-                            ${docsComplete}/${docsTotal}
-                        </span>
-                    </div>
-                    <div class="dr-progress-container-v3">
-                        <div class="dr-progress-bar-v3" style="width: ${(docsComplete / docsTotal) * 100}%; background-color: ${docColor}"></div>
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-between pt-4 border-t text-xs" style="border-color: var(--border-default); color: var(--text-muted);">
-                    <div class="flex items-center gap-1">
-                        <i class="fa fa-calendar"></i> Modified ${this.getDaysAgo(deal.rawSourceData[window.SCHEMA.FIELDS.DEALS.MODIFIED] || deal.submissionDate)}d ago
-                    </div>
-                    
-                    <div class="d-flex align-items-center gap-3">
-                        <button class="btn-card-action btn-clone" data-id="${deal.guid}" data-tooltip="Clone Deal" style="background: transparent; border: none; color: var(--text-muted); font-weight: 700; cursor: pointer; transition: color 0.2s;">
-                            <i class="fa fa-copy" style="font-size: 14px;"></i>
-                        </button>
-                        <button class="btn-card-action" style="background: transparent; border: none; color: var(--brand-primary); font-weight: 700; cursor: pointer;">
-                            Review <i class="fa fa-arrow-right"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>`;
+            return window.DealReviewLogic.ui.renderDealCard(deal);
         },
 
         renderBoard: function () {

@@ -284,21 +284,24 @@ window.ImpactTracker = {
             return {
                 ...d,
                 readinessScore: stats.percent,
+                statusLabel: this.getStatusLabel(d[F.STATUS]),
                 marginBand: this._calculateMarginBand(d[F.MARGIN])
             };
         },
 
-        _calculateMarginBand: function (val) {
-            const pct = (val || 0) * 100;
-            
-            // Pull dynamic Admin thresholds (fallback to 40/30 if API failed)
-            const settings = window.model?.globalSettings || {};
-            const target = settings[window.SCHEMA.FIELDS.GLOBAL_SETTINGS.TARGET_MARGIN] || 40;
-            const critical = settings[window.SCHEMA.FIELDS.GLOBAL_SETTINGS.CRITICAL_MARGIN] || 30;
+        getStatusLabel: function (status) {
+            const S = window.SCHEMA.CHOICES.STATUS;
+            const labels = {
+                [S.DRAFT]: "DRAFT",
+                [S.SUBMITTED]: "PENDING",
+                [S.APPROVED]: "APPROVED",
+                [S.REJECTED]: "REJECTED"
+            };
+            return labels[status] || "UNKNOWN";
+        },
 
-            if (pct >= target) return 'target';     // Green
-            if (pct >= critical) return 'warning'; // Yellow
-            return 'critical';                     // Red
+        _calculateMarginBand: function (val) {
+            return window.DealReviewLogic.mappers.calculateMarginBand(val);
         },
 
         selectDeal: async function (guid) {

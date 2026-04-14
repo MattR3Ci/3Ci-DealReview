@@ -1,0 +1,41 @@
+/**
+ * SubmissionUI.js (Proxy)
+ * Responsibility: Delegates rendering to the centralized DealReviewLogic.js
+ */
+
+const SubmissionUI = {
+    components: {
+        fieldWrapper: (label, html, req) => window.DealReviewLogic.ui.fieldWrapper(label, html, req),
+        textInput: (key, data, ph, cls) => window.DealReviewLogic.ui.textInput(key, data, ph, cls),
+        formatCurrency: (val) => window.DealReviewLogic.ui.formatCurrency(val),
+        
+        // Inline helpers preserved for context
+        numberInput: (key, data, ph) => `<input type="number" id="${key}" class="dr-input" step="0.01" placeholder="${ph}" value="${data[key] || ''}">`,
+        dateInput: (key, data) => `<input type="date" id="${key}" class="dr-input" value="${data[key] || ''}">`,
+        textArea: (key, data, ph) => `<textarea id="${key}" class="dr-textarea" placeholder="${ph}">${data[key] || ''}</textarea>`
+    },
+
+    templates: {
+        basics: (data) => {
+            const ui = SubmissionUI.components;
+            const F = window.SCHEMA.FIELDS.DEALS;
+            return ui.fieldWrapper("Deal Name", ui.textInput(F.TITLE, data, "Enter name"), true);
+        }
+    },
+
+    showToast: (msg, type) => {
+        console.log(`Toast (${type}): ${msg}`);
+    }
+};
+
+window.SubmissionUI = SubmissionUI;
+/**
+ * UIComponents.js (Proxy)
+ */
+(function (window) {
+    const UIComponents = {
+        readinessStyles: (score) => window.DealReviewLogic.ui.readinessStyles ? window.DealReviewLogic.ui.readinessStyles(score) : { bg: '#fff' },
+        statusBadge: (status) => window.DealReviewLogic.ui.statusBadge(status)
+    };
+    window.UIComponents = UIComponents;
+})(window);
