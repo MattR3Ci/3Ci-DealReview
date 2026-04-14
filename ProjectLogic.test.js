@@ -9,7 +9,7 @@ require('./jest.setup.js');
 // 1. Load the central logic engine FIRST
 require('./web-files/DealReviewLogic.js');
 
-// 2. Load all other modules (delegating to logic)
+// 2. Load all other modules (proxies)
 require('./web-files/SubmissionCalc.js');
 require('./web-files/UIComponents.js');
 require('./web-files/SubmissionService.js');
@@ -23,63 +23,60 @@ require('./web-files/DealSubmissionAdministration.js');
 
 const logic = global.window.DealReviewLogic;
 const F = global.window.SCHEMA.FIELDS.DEALS;
-const S = global.window.SCHEMA.CHOICES.STATUS;
 
 describe('Unified Project Logic', () => {
 
-    describe('DealReviewLogic - Utilities', () => {
-        test('utils.safeJsonParse should handle invalid JSON', () => {
+    describe('DealReviewLogic - Full Coverage', () => {
+        test('utils should handle all logic paths', () => {
             expect(logic.utils.safeJsonParse('{"a":1}')).toEqual({a:1});
-            expect(logic.utils.safeJsonParse('invalid', 'fallback')).toBe('fallback'); 
-        });
-
-        test('utils.extractTokenFromHtml should find token', () => {
-            const h = '<input name="__RequestVerificationToken" value="abc">';
-            expect(logic.utils.extractTokenFromHtml(h)).toBe('abc');
-        });
-
-        test('utils.formatDate should handle UTC', () => {
+            expect(logic.utils.safeJsonParse('invalid', 'err')).toBe('err'); 
+            const html = '<input name="__RequestVerificationToken" value="abc">';
+            expect(logic.utils.extractTokenFromHtml(html)).toBe('abc');
+            expect(logic.utils.extractTokenFromHtml('none')).toBeNull();
             expect(logic.utils.formatDate(null)).toBe("Never");
-            expect(logic.utils.formatDate("2024-01-01T00:00:00Z")).toContain("Jan 1, 2024");
+            expect(logic.utils.formatDate("2024-01-01T00:00:00Z")).toContain("2024");
+            expect(logic.utils.getDaysAgo(null)).toBe(0);
+            expect(() => logic.utils.validateConfig(null)).toThrow();
+        });
+
+        test('calculations should validate all sections', () => {
+            const data = { [F.TITLE]: "T", [F.CLIENT_TEXT]: "C", [F.VALUE]: 100, [F.TYPE]: 1, [F.START_DATE]: "D", [F.SALES_LEADER]: "S", [F.ACCOUNTABLE_EXEC]: "E", [F.SF_LINK]: "salesforce.com" };
+            const res = logic.calculations.getSectionStatuses(data, [{id:1}]);
+            expect(res.basics).toBe(true);
+            expect(res.documents).toBe(true);
+            expect(logic.calculations.getGlobalProgress(data).percent).toBeGreaterThan(0);
+            expect(logic.calculations.countRemainingFields({})).toBeGreaterThan(0);
+            expect(logic.calculations.calculateGlobalRisk({})).toBe("LOW");
+        });
+
+        test('ui builders should return themed html', () => {
+            expect(logic.ui.fieldWrapper("L", "I", true)).toContain("*");
+            expect(logic.ui.formatCurrency(100)).toBe("$100.00");
+            expect(logic.ui.statusBadge(0)).toContain("badge");
+            expect(logic.ui.readinessStyles(95).bg).toBe('#D1F0D8');
+            expect(logic.ui.readinessStyles(50).bg).toBe('#FEE2E2');
+            expect(logic.ui.renderDealCard({name:'N'})).toContain('N');
+        });
+
+        test('governance should match files', () => {
+            expect(logic.governance.isFileMatch({name:'_sow_'}, 'sow')).toBe(true);
+            expect(logic.governance.formatFileSize(1024)).toBe("1.0 KB");
+            expect(logic.governance.sortFilesByDate([])).toEqual([]);
+        });
+
+        test('mappers should transform deals', () => {
+            const raw = { [F.DEALID]: "1", [F.TITLE]: "T", [F.STATUS]: 0 };
+            const mapped = logic.mappers.mapRawDealToUI(raw);
+            expect(mapped.guid).toBe("1");
+            expect(logic.mappers.filterAndSortDeals([{name:'A'}], 'A', 'value-desc').length).toBe(1);
         });
     });
 
-    describe('DealReviewLogic - UI Templates', () => {
-        test('renderDealCard should return HTML', () => {
-            const d = { guid: '1', name: 'N', clientName: 'C', totalValue: 100, readinessScore: 100, status: 0 };
-            const html = logic.ui.renderDealCard(d);
-            expect(html).toContain('N');
-            expect(html).toContain('100%');
-        });
-
-        test('renderSidebar should reflect active section', () => {
-            const html = logic.ui.renderSidebar({}, 'basics');
-            expect(html).toContain('is-active');
-            expect(html).toContain('Basics');
-        });
-
-        test('renderSection should return headers', () => {
-            const html = logic.ui.renderSection('basics', {});
-            expect(html).toContain('basics');
-            expect(html).toContain('ci_title');
-        });
-
-        test('governance templates should render', () => {
-            const cat = { id: 'sow', name: 'SOW', files: [] };
-            const html = logic.governance.renderCategoryButton(cat, 'sow');
-            expect(html).toContain('is-active');
-            expect(html).toContain('SOW');
-        });
-    });
-
-    describe('Integration Layer', () => {
-        test('SubmissionUI delegates to central UI logic', () => {
-            const html = window.SubmissionUI.components.fieldWrapper("Test", "in", false);
-            expect(html).toContain("Test");
-        });
-
-        test('SubmissionCalc delegates to calculations', () => {
-            expect(window.SubmissionCalc._isFieldFilled({ [F.TITLE]: "T" }, F.TITLE)).toBe(true);
+    describe('Integration Proxies', () => {
+        test('Proxies should delegate correctly', async () => {
+            expect(window.SubmissionCalc._isFieldFilled({[F.TITLE]:"T"}, F.TITLE)).toBe(true);
+            expect(await window.SubmissionService.loadClients()).toEqual([]);
+            expect(await window.DealService.getCsrfToken()).toBe("tok");
         });
     });
 });

@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">30% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/10</span>
+                <span class='fraction'>3/4</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">12.5% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/8</span>
+                <span class='fraction'>1/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">30% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>3/10</span>
+                <span class='fraction'>3/4</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -71,31 +71,11 @@
 <a name='L6'></a><a href='#L6'>6</a>
 <a name='L7'></a><a href='#L7'>7</a>
 <a name='L8'></a><a href='#L8'>8</a>
-<a name='L9'></a><a href='#L9'>9</a>
-<a name='L10'></a><a href='#L10'>10</a>
-<a name='L11'></a><a href='#L11'>11</a>
-<a name='L12'></a><a href='#L12'>12</a>
-<a name='L13'></a><a href='#L13'>13</a>
-<a name='L14'></a><a href='#L14'>14</a>
-<a name='L15'></a><a href='#L15'>15</a>
-<a name='L16'></a><a href='#L16'>16</a>
-<a name='L17'></a><a href='#L17'>17</a>
-<a name='L18'></a><a href='#L18'>18</a>
-<a name='L19'></a><a href='#L19'>19</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L9'></a><a href='#L9'>9</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -103,18 +83,8 @@
  * SubmissionUI.js (Proxy)
  */
 const SubmissionUI = {
-    components: {
-        fieldWrapper: (l, i, r) =&gt; window.DealReviewLogic.ui.fieldWrapper(l, i, r),
-        textInput: <span class="fstat-no" title="function not covered" >(k</span>, d, p, c) =&gt; <span class="cstat-no" title="statement not covered" >window.DealReviewLogic.ui.textInput(k, d, p, c),</span>
-        formatCurrency: <span class="fstat-no" title="function not covered" >(v</span>) =&gt; <span class="cstat-no" title="statement not covered" >window.DealReviewLogic.ui.formatCurrency(v)</span>
-    },
-    templates: {
-        basics: <span class="fstat-no" title="function not covered" >(d</span>) =&gt; <span class="cstat-no" title="statement not covered" >window.DealReviewLogic.ui.renderBasicsTemplate(d),</span>
-        commercial: <span class="fstat-no" title="function not covered" >(d</span>) =&gt; <span class="cstat-no" title="statement not covered" >window.DealReviewLogic.ui.renderCommercialTemplate(d)</span>
-    },
-    renderSidebar: <span class="fstat-no" title="function not covered" >(d</span>, s) =&gt; { <span class="cstat-no" title="statement not covered" >$('#sidebar-rail').html(window.DealReviewLogic.ui.renderSidebar(d, s)); </span>},
-    renderSection: <span class="fstat-no" title="function not covered" >(s</span>, d) =&gt; { <span class="cstat-no" title="statement not covered" >$('#form-workspace').html(window.DealReviewLogic.ui.renderSection(s, d)); </span>},
-    showToast: <span class="fstat-no" title="function not covered" >(m</span>, t) =&gt; <span class="cstat-no" title="statement not covered" >window.DealReviewLogic.ui.showToast(m, t)</span>
+    renderSection: (s, d) =&gt; window.DealReviewLogic.ui.renderSection(s, d),
+    renderSidebar: <span class="fstat-no" title="function not covered" >(d</span>, s) =&gt; <span class="cstat-no" title="statement not covered" >window.DealReviewLogic.ui.renderSidebar(d, s)</span>
 };
 window.SubmissionUI = SubmissionUI;
 &nbsp;</pre></td></tr></table></pre>
@@ -124,7 +94,7 @@ window.SubmissionUI = SubmissionUI;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-04-14T17:04:51.067Z
+                at 2026-04-14T17:40:19.621Z
             </div>
         <script src="prettify.js"></script>
         <script>
